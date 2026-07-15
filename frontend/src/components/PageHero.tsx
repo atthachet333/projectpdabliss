@@ -1,0 +1,2 @@
+interface PageHeroProps { eyebrow:string; title:string; description:string; }
+export function PageHero({eyebrow,title,description}:PageHeroProps):JSX.Element { return <section className="bg-gradient-to-br from-green-950 to-green-700 py-20 text-center text-white"><div className="container-page"><p className="font-semibold text-green-200">{eyebrow}</p><h1 className="mt-3 text-4xl font-extrabold text-white md:text-5xl">{title}</h1><p className="mx-auto mt-5 max-w-2xl text-green-50/90">{description}</p></div></section>; }
