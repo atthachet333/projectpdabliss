@@ -3,7 +3,7 @@ import {
   FileText, Users, CalendarDays, 
   LogOut, BookOpen, FileCheck,
   ShieldCheck, Zap, Heart, MessageSquare, 
-  Search, ChevronRight, CheckCircle2, ChevronDown
+  Search, ChevronRight, CheckCircle2, ChevronDown, Star, ArrowRight, Sparkles
 } from 'lucide-react';
 import { logUserAction } from '../utils/logger';
 
@@ -12,133 +12,206 @@ export const HomePage: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(0); 
 
   const services = [
-    { id: '01', title: 'แจ้งเข้า -\nเปลี่ยนย้ายนายจ้าง', icon: <Users className="w-8 h-8 text-green-700" /> },
-    { id: '02', title: 'ขึ้นทะเบียนแรงงาน', icon: <FileText className="w-8 h-8 text-green-700" /> },
-    { id: '03', title: 'รายงานตัว 90D', icon: <CalendarDays className="w-8 h-8 text-green-700" /> },
-    { id: '04', title: 'แจ้งออก -\nของพนักงาน', icon: <LogOut className="w-8 h-8 text-green-700" /> },
-    { id: '05', title: 'ทำเล่ม CI,\nPassport, PJ', icon: <BookOpen className="w-8 h-8 text-green-700" /> },
-    { id: '06', title: 'ต่อ มติ ต่างๆ', icon: <FileCheck className="w-8 h-8 text-green-700" /> },
+    { id: '01', title: 'แจ้งเข้า -\nเปลี่ยนย้ายนายจ้าง', icon: <Users className="w-8 h-8" /> },
+    { id: '02', title: 'ขึ้นทะเบียนแรงงาน', icon: <FileText className="w-8 h-8" /> },
+    { id: '03', title: 'รายงานตัว 90D', icon: <CalendarDays className="w-8 h-8" /> },
+    { id: '04', title: 'แจ้งออก -\nของพนักงาน', icon: <LogOut className="w-8 h-8" /> },
+    { id: '05', title: 'ทำเล่ม CI,\nPassport, PJ', icon: <BookOpen className="w-8 h-8" /> },
+    { id: '06', title: 'ต่อ มติ ต่างๆ', icon: <FileCheck className="w-8 h-8" /> },
   ];
 
   const faqs = [
     { 
       q: 'ใช้เวลาดำเนินการเอกสารแต่ละประเภทนานแค่ไหน?', 
-      a: 'ระยะเวลาจะขึ้นอยู่กับประเภทของเอกสารครับ แต่ทางเราการันตีความรวดเร็วและมีทีมงานคอยอัปเดตสถานะงานให้คุณทราบในทุกขั้นตอน' 
+      a: 'ระยะเวลาจะขึ้นอยู่กับประเภทของเอกสารครับ แต่ทางเราการันตีความรวดเร็วและมีทีมงานคอยอัปเดตสถานะงานให้คุณทราบในทุกขั้นตอนแบบ Real-time' 
     },
     { 
       q: 'ต้องเตรียมเอกสารอะไรบ้างสำหรับการขึ้นทะเบียนแรงงาน?', 
-      a: 'ทางเราจะมีเจ้าหน้าที่ประเมินและส่ง Checklist รายการเอกสารที่จำเป็นให้คุณลูกค้าเตรียมล่วงหน้า เพื่อให้เอกสารถูกต้องครบถ้วนตั้งแต่ครั้งแรก' 
+      a: 'ทางเราจะมีเจ้าหน้าที่ประเมินและส่ง Checklist รายการเอกสารที่จำเป็นให้คุณลูกค้าเตรียมล่วงหน้า เพื่อให้เอกสารถูกต้องครบถ้วนตั้งแต่ครั้งแรก ลดปัญหาเอกสารตีกลับ' 
     },
     { 
       q: 'สามารถปรึกษาพูดคุยก่อนตัดสินใจใช้บริการได้หรือไม่?', 
-      a: 'ได้แน่นอนครับ! เรามีบริการให้คำปรึกษาฟรี ไม่มีค่าใช้จ่ายเบื้องต้น สามารถทัก Line หรือโทรสอบถามได้ในเวลาทำการเลยครับ' 
+      a: 'ได้แน่นอนครับ! เรามีบริการให้คำปรึกษาฟรี ไม่มีค่าใช้จ่ายเบื้องต้น สามารถทัก Line หรือโทรสอบถามได้ในเวลาทำการ ทีมงานผู้เชี่ยวชาญพร้อมดูแลครับ' 
     }
   ];
 
   const handleConsultClick = () => {
     logUserAction('CLICK_CONSULT_BUTTON', { location: 'HomePage_Hero' });
-    alert('ระบบบันทึก Log การกดปุ่ม "สอบถามบริการ" เรียบร้อยครับ!');
+    alert('ระบบบันทึก Log การกดปุ่ม "สอบถามบริการ" เรียบร้อยครับ! เจ้าหน้าที่จะติดต่อกลับโดยเร็ว');
   };
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
+    if(openFaq !== index) logUserAction('CLICK_FAQ', { question: faqs[index].q });
   };
 
   return (
-    <div className="w-full font-sans pb-20">
+    <div className="w-full font-sans pb-20 bg-[#f8fafc] overflow-hidden">
       
-      {/* 1. Hero Section */}
-      <section className="relative pt-20 pb-32 px-6 border-b border-white/50 overflow-hidden bg-white/70 backdrop-blur-sm">
-        <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-green-50 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+      {/* --- ฝัง Custom CSS สำหรับ Animations สุดว้าว --- */}
+      <style>{`
+        @keyframes float {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+          100% { transform: translateY(0px); }
+        }
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float-delayed {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-15px); }
+          100% { transform: translateY(0px); }
+        }
+        .animate-float-delayed {
+          animation: float-delayed 7s ease-in-out infinite 1s;
+        }
+        @keyframes gradient-x {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animate-gradient-x {
+          background-size: 200% auto;
+          animation: gradient-x 4s linear infinite;
+        }
+      `}</style>
+
+      {/* 1. Hero Section (ปรับเอฟเฟกต์และลูกเล่นแสง) */}
+      <section className="relative pt-24 pb-40 px-6 border-b border-gray-100 bg-white">
+        {/* แสง Glow พื้นหลังวิ่งไปมา */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-green-300/20 rounded-full mix-blend-multiply filter blur-[80px] animate-pulse pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-emerald-200/20 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse pointer-events-none delay-700"></div>
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
           
-          <div className="flex flex-col items-start pr-8">
-            <div className="flex items-center space-x-2 bg-green-50/80 backdrop-blur-sm text-green-700 px-5 py-2 rounded-full mb-6 border border-green-100 shadow-sm">
-              <ShieldCheck className="w-5 h-5" />
-              <span className="text-sm font-bold tracking-wide">ผู้ช่วยด้านเอกสารที่คุณไว้วางใจ</span>
+          <div className="flex flex-col items-start pr-8 z-20">
+            <div className="flex items-center space-x-2 bg-green-50 text-green-700 px-5 py-2.5 rounded-full mb-6 border border-green-200 shadow-sm hover:scale-105 transition-transform cursor-default group">
+              <Sparkles className="w-5 h-5 group-hover:text-yellow-500 transition-colors" />
+              <span className="text-sm font-bold tracking-wide">พาร์ทเนอร์ที่คุณไว้วางใจ One-Stop Service</span>
             </div>
             
-            <h1 className="text-5xl md:text-6xl lg:text-[4rem] font-black mb-6 leading-[1.15] text-gray-900 tracking-tight">
-              บริการจัดทำ<br/>เอกสารครบวงจร
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-[1.15] tracking-tight">
+              บริการจัดทำ <br/>
+              {/* ข้อความไล่สีวิ่งได้ */}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-800 via-emerald-500 to-green-900 animate-gradient-x">
+                เอกสารครบวงจร
+              </span>
             </h1>
             
-            <p className="text-2xl md:text-3xl text-green-700 mb-6 font-bold tracking-tight">
-              รวดเร็ว ถูกต้อง เชื่อถือได้ ดูแลครบ จบทุกขั้นตอน
+            <p className="text-xl md:text-2xl text-gray-800 mb-6 font-bold tracking-tight flex items-center">
+              รวดเร็ว <span className="mx-2 text-green-500">•</span> ถูกต้อง <span className="mx-2 text-green-500">•</span> เชื่อถือได้
             </p>
-            <p className="text-base md:text-lg text-gray-700 mb-10 max-w-lg leading-relaxed">
-              ทีมงานมืออาชีพ พร้อมดูแลเอกสารของคุณอย่างถูกต้องตามกฎหมาย 
+            <p className="text-base md:text-lg text-gray-500 mb-10 max-w-lg leading-relaxed font-medium">
+              ทีมงานมืออาชีพ พร้อมดูแลเอกสารแรงงานและธุรกิจของคุณอย่างถูกต้องตามกฎหมาย 
               ประหยัดเวลา ลดความกังวล ให้เราดูแลทุกขั้นตอนแทนคุณ
             </p>
             
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 items-center">
               <button 
                 onClick={handleConsultClick}
-                className="bg-green-800 text-white font-bold py-4 px-10 text-lg rounded-full shadow-lg hover:bg-green-900 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center group"
+                className="bg-gradient-to-r from-green-700 to-green-600 text-white font-bold py-4 px-10 text-lg rounded-2xl shadow-[0_10px_30px_rgba(22,163,74,0.3)] hover:shadow-[0_15px_40px_rgba(22,163,74,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center group relative overflow-hidden"
               >
-                สอบถามบริการ <ChevronRight className="ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                <span className="relative z-10 flex items-center">สอบถามบริการ <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1.5 transition-transform" /></span>
               </button>
-              <button className="bg-white/80 backdrop-blur-sm text-green-800 border border-green-200 font-bold py-4 px-10 text-lg rounded-full shadow-sm hover:bg-green-50 transition-all duration-300 flex items-center group">
-                ดูบริการทั้งหมด <ChevronRight className="ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform text-green-500" />
+              <button className="bg-white text-gray-700 border-2 border-gray-200 font-bold py-4 px-10 text-lg rounded-2xl shadow-sm hover:border-green-500 hover:text-green-700 hover:bg-green-50 transition-all duration-300 flex items-center group">
+                ดูบริการทั้งหมด <ChevronRight className="ml-1 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
+            </div>
+
+            {/* เพิ่ม Trust Badge */}
+            <div className="mt-10 flex items-center gap-4 text-sm font-bold text-gray-500">
+              <div className="flex -space-x-2">
+                {[1,2,3,4].map(i => (
+                  <img key={i} src={`https://i.pravatar.cc/100?img=${i+10}`} alt="user" className="w-8 h-8 rounded-full border-2 border-white shadow-sm" />
+                ))}
+              </div>
+              <p>บริษัทชั้นนำกว่า <span className="text-green-700 font-black">1,000+</span> แห่งเลือกใช้</p>
             </div>
           </div>
 
-          <div className="relative h-[480px] w-full rounded-2xl overflow-hidden shadow-2xl group border border-white/50">
-            <img 
-              src="/images/tw.png" 
-              alt="บริการเอกสาร" 
-              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" 
-            />
-            <div className="absolute top-0 left-0 w-2 h-full bg-green-600"></div>
+          {/* รูปภาพพร้อมเอฟเฟกต์ลอยตัว */}
+          <div className="relative w-full h-[450px] md:h-[550px] z-10 flex justify-center items-center">
+            {/* กล่องตกแต่งด้านหลัง */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-green-100 to-emerald-50 rounded-[3rem] rotate-3 scale-95 animate-float-delayed -z-10"></div>
+            
+            <div className="relative w-full h-full rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-[8px] border-white animate-float group">
+              <img 
+                src="/images/tw.png" 
+                alt="บริการเอกสาร" 
+                className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000 ease-out" 
+                onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=800&q=80" }} // Fallback รูปชั่วคราว
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            </div>
+
+            {/* Badge ลอยๆ ซ้อนรูปภาพ */}
+            <div className="absolute -bottom-6 -left-6 bg-white p-5 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-4 animate-float-delayed z-20">
+              <div className="bg-green-100 p-3 rounded-full text-green-600"><Star className="w-6 h-6 fill-current" /></div>
+              <div>
+                <p className="text-xs text-gray-500 font-bold mb-0.5">ความพึงพอใจ</p>
+                <p className="text-lg font-black text-gray-900">98% รีวิวบวก</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 2. Stats Bar */}
-      <section className="max-w-7xl mx-auto px-6 relative z-20 -mt-10">
-        <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-5 flex flex-col md:flex-row justify-between divide-y md:divide-y-0 md:divide-x divide-gray-200/50 border border-white/50">
+      {/* 2. Stats Bar (เด้งทะลุกรอบขึ้นมา) */}
+      <section className="max-w-7xl mx-auto px-6 relative z-30 -mt-14">
+        <div className="bg-white rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-4 flex flex-col md:flex-row justify-between divide-y md:divide-y-0 md:divide-x divide-gray-100 border border-gray-100">
           {[
-            { icon: <Zap className="w-8 h-8 text-green-600" />, title: 'รวดเร็ว', desc: 'ดำเนินการไวตรงตามกำหนด' },
-            { icon: <CheckCircle2 className="w-8 h-8 text-green-600" />, title: 'ถูกต้อง', desc: 'เอกสารถูกต้องตามกฎหมาย' },
-            { icon: <Users className="w-8 h-8 text-green-600" />, title: 'ดูแลครบ', desc: 'ครบทุกขั้นตอนจบที่เดียว' },
-            { icon: <ShieldCheck className="w-8 h-8 text-green-600" />, title: 'มีประสบการณ์', desc: 'ทีมงานมืออาชีพเชี่ยวชาญ' },
+            { icon: <Zap />, title: 'รวดเร็ว', desc: 'ดำเนินการไวตรงกำหนด' },
+            { icon: <CheckCircle2 />, title: 'ถูกต้อง', desc: 'เอกสารถูกต้อง 100%' },
+            { icon: <Users />, title: 'ดูแลครบ', desc: 'จบทุกขั้นตอนที่เดียว' },
+            { icon: <ShieldCheck />, title: 'เชี่ยวชาญ', desc: 'ทีมงานมืออาชีพ' },
           ].map((stat, idx) => (
-            <div key={idx} className="flex items-center gap-5 px-6 py-4 md:py-2 flex-1 hover:-translate-y-1 transition-transform duration-300 cursor-default">
-              <div className="flex-shrink-0 bg-white/60 p-4 rounded-full border border-white/50 shadow-sm">{stat.icon}</div>
+            <div key={idx} className="flex items-center gap-4 px-6 py-5 flex-1 hover:-translate-y-2 transition-transform duration-300 cursor-default group bg-white hover:bg-green-50/50 rounded-2xl">
+              <div className="flex-shrink-0 bg-green-50 p-3.5 rounded-2xl text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors duration-300 shadow-sm group-hover:shadow-green-200 group-hover:scale-110">
+                {React.cloneElement(stat.icon as React.ReactElement, { className: "w-6 h-6" })}
+              </div>
               <div>
-                <h4 className="font-bold text-gray-900 text-base">{stat.title}</h4>
-                <p className="text-xs text-gray-600 mt-1">{stat.desc}</p>
+                <h4 className="font-bold text-gray-900 text-[15px] group-hover:text-green-700 transition-colors">{stat.title}</h4>
+                <p className="text-[12px] text-gray-500 mt-0.5 font-medium">{stat.desc}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* 3. Main Content Grid */}
-      <section className="max-w-7xl mx-auto px-6 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      {/* 3. Main Content Grid (บริการ & ขั้นตอน) */}
+      <section className="max-w-7xl mx-auto px-6 py-24">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-12">
           
-          <div className="lg:col-span-5 bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-sm border border-white/50">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center border-b border-gray-200/50 pb-4">
-              <div className="w-2 h-7 bg-green-600 rounded-full mr-3"></div>
+          {/* ซ้าย: บริการของเรา */}
+          <div className="xl:col-span-5 bg-white p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative overflow-hidden group/section">
+            {/* วงกลมตกแต่ง */}
+            <div className="absolute -top-24 -right-24 w-48 h-48 bg-green-50 rounded-full blur-2xl group-hover/section:bg-green-100 transition-colors duration-700"></div>
+
+            <h2 className="text-3xl font-black text-gray-900 mb-10 flex items-center relative z-10">
+              <div className="w-2 h-8 bg-gradient-to-b from-green-400 to-green-700 rounded-full mr-4 shadow-sm"></div>
               บริการของเรา
             </h2>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 relative z-10">
               {services.map((service) => (
                 <div 
                   key={service.id} 
-                  className="bg-white/60 backdrop-blur-sm p-5 rounded-xl border border-white/50 hover:border-green-400 hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex flex-col justify-between"
+                  className="relative bg-gray-50/50 p-6 rounded-2xl border border-gray-100 hover:border-green-400 hover:bg-white hover:shadow-[0_10px_25px_rgba(34,197,94,0.15)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer group flex flex-col justify-between overflow-hidden"
                   onClick={() => logUserAction('VIEW_SERVICE_DETAIL', { serviceId: service.id, serviceName: service.title })}
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="text-green-700 group-hover:scale-110 transition-transform duration-300">
-                      {service.icon}
-                    </div>
-                    <span className="text-sm font-black text-gray-400 group-hover:text-green-300 transition-colors">{service.id}</span>
+                  {/* ลายน้ำตัวเลข (Watermark) ใหญ่ๆ */}
+                  <div className="absolute -bottom-4 -right-2 text-6xl font-black text-gray-100 group-hover:text-green-50 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 z-0 select-none">
+                    {service.id}
                   </div>
-                  <h3 className="font-bold text-gray-800 text-[15px] leading-relaxed group-hover:text-green-700 transition-colors whitespace-pre-line">
+
+                  <div className="flex justify-between items-start mb-6 relative z-10">
+                    <div className="text-gray-400 bg-white p-3 rounded-xl shadow-sm group-hover:bg-green-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
+                      {React.cloneElement(service.icon, { className: "w-6 h-6" })}
+                    </div>
+                  </div>
+                  <h3 className="font-bold text-gray-800 text-[14px] leading-relaxed group-hover:text-green-700 transition-colors whitespace-pre-line relative z-10">
                     {service.title}
                   </h3>
                 </div>
@@ -146,67 +219,82 @@ export const HomePage: React.FC = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-7 space-y-8">
+          {/* ขวา: ทำไมต้องเลือกเรา & ขั้นตอน (ใช้ลูกเล่นเส้นวิ่งแบบเต็มขั้น) */}
+          <div className="xl:col-span-7 space-y-10">
             
-            <div className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-sm border border-white/50">
-              <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center border-b border-gray-200/50 pb-4">
-                <div className="w-2 h-7 bg-green-600 rounded-full mr-3"></div>
+            {/* ทำไมต้องเลือกเรา */}
+            <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+              <h2 className="text-3xl font-black text-gray-900 mb-10 flex items-center">
+                <div className="w-2 h-8 bg-gradient-to-b from-green-400 to-green-700 rounded-full mr-4 shadow-sm"></div>
                 ทำไมต้องเลือก PDA BLISS
               </h2>
               
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
                 {[
-                  { title: 'แนะนำชัดเจน', desc: 'อธิบายครบ\nเข้าใจง่าย', icon: <MessageSquare className="w-7 h-7" /> },
-                  { title: 'ติดตามใกล้ชิด', desc: 'อัปเดตงาน\nตลอดเวลา', icon: <Search className="w-7 h-7" /> },
-                  { title: 'ลดความยุ่งยาก', desc: 'ประหยัดเวลา\nไม่ยุ่งยาก', icon: <Heart className="w-7 h-7" /> },
-                  { title: 'เอกสารครบ', desc: 'บริการครบ\nเรื่องเอกสาร', icon: <FileText className="w-7 h-7" /> },
-                  { title: 'เชื่อถือได้', desc: 'ถูกต้องตาม\nกฎหมาย 100%', icon: <ShieldCheck className="w-7 h-7" /> },
+                  { title: 'แนะนำชัดเจน', desc: 'อธิบายครบ\nเข้าใจง่าย', icon: <MessageSquare /> },
+                  { title: 'ติดตามใกล้ชิด', desc: 'อัปเดตงาน\nตลอดเวลา', icon: <Search /> },
+                  { title: 'ลดความยุ่งยาก', desc: 'ประหยัดเวลา\nไม่ยุ่งยาก', icon: <Heart /> },
+                  { title: 'เอกสารครบ', desc: 'บริการครบ\nเรื่องเอกสาร', icon: <FileText /> },
+                  { title: 'เชื่อถือได้', desc: 'ถูกต้องตาม\nกฎหมาย 100%', icon: <ShieldCheck /> },
                 ].map((item, idx) => (
-                  <div key={idx} className="text-center group flex flex-col items-center hover:-translate-y-1 transition-transform duration-300">
-                    <div className="w-16 h-16 rounded-full bg-white/80 backdrop-blur-sm border border-white/50 shadow-sm text-green-700 flex items-center justify-center mb-4 group-hover:bg-green-700 group-hover:text-white transition-all duration-300">
-                      {item.icon}
+                  <div key={idx} className="text-center group flex flex-col items-center hover:-translate-y-2 transition-transform duration-300 cursor-default">
+                    <div className="w-16 h-16 rounded-2xl bg-gray-50 border border-gray-100 shadow-sm text-green-600 flex items-center justify-center mb-5 group-hover:bg-green-600 group-hover:text-white group-hover:rotate-6 transition-all duration-300">
+                      {React.cloneElement(item.icon, { className: "w-7 h-7" })}
                     </div>
-                    <h4 className="font-bold text-gray-800 text-[13px] md:text-sm mb-1.5 group-hover:text-green-700 transition-colors">{item.title}</h4>
-                    <p className="text-[11px] text-gray-600 whitespace-pre-line leading-relaxed">{item.desc}</p>
+                    <h4 className="font-bold text-gray-900 text-[14px] mb-2 group-hover:text-green-700 transition-colors">{item.title}</h4>
+                    <p className="text-[12px] text-gray-500 whitespace-pre-line leading-relaxed font-medium">{item.desc}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-sm border border-white/50" onMouseLeave={() => setHoveredStep(null)}>
-              <h2 className="text-2xl font-bold text-gray-900 mb-10 flex items-center border-b border-gray-200/50 pb-4">
-                <div className="w-2 h-7 bg-green-600 rounded-full mr-3"></div>
+            {/* ขั้นตอนการให้บริการ (เส้นวิ่งเทพๆ) */}
+            <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 group/process" onMouseLeave={() => setHoveredStep(null)}>
+              <h2 className="text-3xl font-black text-gray-900 mb-14 flex items-center">
+                <div className="w-2 h-8 bg-gradient-to-b from-green-400 to-green-700 rounded-full mr-4 shadow-sm"></div>
                 ขั้นตอนการให้บริการ
               </h2>
               
-              <div className="relative flex flex-col sm:flex-row justify-between items-center sm:items-start px-4">
-                <div className="hidden sm:block absolute top-[24px] left-[10%] right-[10%] h-[4px] bg-gray-200/60 -z-10 rounded-full overflow-hidden">
+              <div className="relative flex flex-col md:flex-row justify-between items-center md:items-start px-2">
+                {/* เส้น Background */}
+                <div className="hidden md:block absolute top-[28px] left-[10%] right-[10%] h-[4px] bg-gray-100 -z-10 rounded-full overflow-hidden">
+                  {/* แถบสีเขียว (Progress Bar) ที่ขยับตามเมาส์ */}
                   <div 
-                    className="h-full bg-green-500 transition-all duration-700 ease-out"
+                    className="h-full bg-gradient-to-r from-green-400 to-green-600 transition-all duration-700 ease-in-out shadow-[0_0_10px_rgba(34,197,94,0.5)]"
                     style={{ width: hoveredStep !== null ? `${(hoveredStep / 4) * 100}%` : '0%' }}
                   ></div>
                 </div>
                 
                 {[
-                  { num: '01', title: 'รับข้อมูล', desc: 'รับข้อมูลความต้องการ' },
-                  { num: '02', title: 'ตรวจเอกสาร', desc: 'ตรวจสอบอย่างละเอียด' },
-                  { num: '03', title: 'ยื่นดำเนินการ', desc: 'ยื่นเอกสารตามขั้นตอน' },
-                  { num: '04', title: 'ติดตามผล', desc: 'ติดตามและประสานงาน' },
-                  { num: '05', title: 'ส่งมอบงาน', desc: 'ส่งมอบงานเรียบร้อย' }
+                  { num: '01', title: 'รับข้อมูล', desc: 'แจ้งความต้องการ' },
+                  { num: '02', title: 'ตรวจเอกสาร', desc: 'ตรวจสอบละเอียด' },
+                  { num: '03', title: 'ยื่นดำเนินการ', desc: 'ยื่นตามขั้นตอน' },
+                  { num: '04', title: 'ติดตามผล', desc: 'ประสานงานตลอด' },
+                  { num: '05', title: 'ส่งมอบงาน', desc: 'งานเสร็จสมบูรณ์' }
                 ].map((step, idx) => (
                   <div 
                     key={idx} 
-                    className="relative z-10 flex flex-col items-center group w-full sm:w-auto mb-8 sm:mb-0 cursor-pointer"
+                    className="relative z-10 flex flex-col items-center group/step w-full md:w-auto mb-10 md:mb-0 cursor-pointer"
                     onMouseEnter={() => setHoveredStep(idx)}
                   >
-                    <div className={`w-12 h-12 rounded-full border-2 flex items-center justify-center text-base font-bold mb-4 shadow-sm transition-all duration-300 ${hoveredStep !== null && idx <= hoveredStep ? 'bg-green-700 border-green-700 text-white scale-110 shadow-green-200 shadow-lg' : 'bg-white/80 border-green-700 text-green-700'}`}>
+                    {/* ไอคอนหมายเลข */}
+                    <div className={`w-14 h-14 rounded-full border-[3px] flex items-center justify-center text-lg font-black mb-5 transition-all duration-300 
+                      ${hoveredStep !== null && idx <= hoveredStep 
+                        ? 'bg-green-600 border-green-600 text-white scale-110 shadow-[0_10px_20px_rgba(34,197,94,0.3)] -translate-y-1' 
+                        : 'bg-white border-gray-200 text-gray-400 group-hover/step:border-green-300'}`}>
                       {step.num}
                     </div>
-                    <h4 className={`font-bold text-[14px] md:text-sm mb-1.5 transition-colors duration-300 ${hoveredStep !== null && idx <= hoveredStep ? 'text-green-700' : 'text-gray-900'}`}>{step.title}</h4>
-                    <p className="text-[11px] text-gray-600 text-center">{step.desc}</p>
                     
+                    <h4 className={`font-bold text-[15px] mb-2 transition-colors duration-300 
+                      ${hoveredStep !== null && idx <= hoveredStep ? 'text-green-700' : 'text-gray-900'}`}>
+                      {step.title}
+                    </h4>
+                    <p className="text-[12px] text-gray-500 text-center font-medium">{step.desc}</p>
+                    
+                    {/* ลูกศรเชื่อม (แสดงเฉพาะจอคอม) */}
                     {idx < 4 && (
-                      <ChevronRight className={`hidden sm:block absolute top-3.5 -right-[calc(50%+12px)] w-6 h-6 transition-colors duration-500 ${hoveredStep !== null && idx < hoveredStep ? 'text-green-600' : 'text-gray-400'}`} />
+                      <ChevronRight className={`hidden md:block absolute top-4 -right-[calc(50%+16px)] w-6 h-6 transition-colors duration-500 
+                        ${hoveredStep !== null && idx < hoveredStep ? 'text-green-500 translate-x-1' : 'text-gray-300'}`} />
                     )}
                   </div>
                 ))}
@@ -217,16 +305,34 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. FAQ Section */}
-      <section className="max-w-7xl mx-auto px-6 mb-10">
-        <div className="bg-white/80 backdrop-blur-md p-8 md:p-10 rounded-2xl shadow-sm border border-white/50 flex flex-col lg:flex-row gap-10">
+      {/* 4. Banner เรียกน้ำย่อยก่อน FAQ */}
+      <section className="max-w-7xl mx-auto px-6 mb-12">
+         <div className="bg-gradient-to-r from-green-900 to-green-700 rounded-[2rem] p-10 md:p-14 text-center relative overflow-hidden shadow-2xl">
+            {/* วงกลมตกแต่ง */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-green-400/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+            
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-4 relative z-10">พร้อมให้เราดูแลเอกสารของคุณแล้วหรือยัง?</h2>
+            <p className="text-green-100 text-lg mb-8 relative z-10 max-w-2xl mx-auto">ติดต่อทีมงานผู้เชี่ยวชาญของเราวันนี้ ปรึกษาฟรี ไม่มีค่าใช้จ่ายเบื้องต้น</p>
+            <button 
+              onClick={handleConsultClick}
+              className="relative z-10 bg-white text-green-800 font-bold py-4 px-10 rounded-full shadow-[0_10px_20px_rgba(0,0,0,0.2)] hover:scale-105 hover:shadow-[0_15px_30px_rgba(0,0,0,0.3)] transition-all duration-300 flex items-center mx-auto group"
+            >
+              ติดต่อรับคำปรึกษา <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
+            </button>
+         </div>
+      </section>
+
+      {/* 5. FAQ Section (สมูทขึ้น สวยขึ้น) */}
+      <section className="max-w-7xl mx-auto px-6 mb-16">
+        <div className="bg-white p-8 md:p-12 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 flex flex-col lg:flex-row gap-12">
           
           <div className="lg:w-1/3 flex flex-col">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-              <div className="w-2 h-7 bg-green-600 rounded-full mr-3"></div>
-              คำถามที่พบบ่อย (FAQ)
+            <h2 className="text-3xl font-black text-gray-900 mb-6 flex items-center">
+              <div className="w-2 h-8 bg-gradient-to-b from-green-400 to-green-700 rounded-full mr-4 shadow-sm"></div>
+              คำถามที่พบบ่อย
             </h2>
-            <p className="text-sm text-gray-700 leading-relaxed pr-4">
+            <p className="text-[15px] text-gray-500 font-medium leading-relaxed pr-4">
               รวบรวมข้อสงสัยเกี่ยวกับการให้บริการของเรา เพื่อให้คุณเข้าใจขั้นตอนได้ง่ายขึ้น 
               หากมีคำถามเพิ่มเติมสามารถติดต่อสอบถามทีมงานได้ตลอดเวลา
             </p>
@@ -236,24 +342,32 @@ export const HomePage: React.FC = () => {
             {faqs.map((faq, idx) => (
               <div 
                 key={idx} 
-                className="border border-white/50 rounded-xl overflow-hidden transition-all duration-300 hover:border-green-300 bg-white/40"
+                className={`border rounded-2xl overflow-hidden transition-all duration-300 ${
+                  openFaq === idx 
+                    ? 'border-green-400 bg-green-50/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]' 
+                    : 'border-gray-200 hover:border-green-300 bg-white'
+                }`}
               >
                 <button 
                   onClick={() => toggleFaq(idx)}
-                  className="w-full text-left px-6 py-4 flex items-center justify-between hover:bg-white/60 transition-colors"
+                  className="w-full text-left px-8 py-5 flex items-center justify-between transition-colors focus:outline-none"
                 >
-                  <span className={`font-bold text-sm ${openFaq === idx ? 'text-green-700' : 'text-gray-800'}`}>
+                  <span className={`font-bold text-[15px] flex items-center gap-4 ${openFaq === idx ? 'text-green-800' : 'text-gray-900'}`}>
+                    <span className={`flex items-center justify-center w-7 h-7 rounded-full text-xs transition-colors ${openFaq === idx ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-500'}`}>Q</span>
                     {faq.q}
                   </span>
-                  <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${openFaq === idx ? 'rotate-180 text-green-700' : 'text-gray-500'}`} />
+                  <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${openFaq === idx ? 'rotate-180 text-green-600' : 'text-gray-400'}`} />
                 </button>
                 
                 <div 
-                  className={`px-6 text-sm text-gray-700 leading-relaxed transition-all duration-300 ease-in-out ${
-                    openFaq === idx ? 'max-h-40 py-4 border-t border-white/50 opacity-100 bg-transparent' : 'max-h-0 py-0 opacity-0 bg-transparent'
+                  className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                    openFaq === idx ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
                   }`}
                 >
-                  {faq.a}
+                  <div className="px-8 pb-6 pt-2 text-[14px] text-gray-600 font-medium leading-relaxed flex gap-4">
+                    <span className="font-bold text-green-600 pt-0.5 mt-0.5">A</span>
+                    {faq.a}
+                  </div>
                 </div>
               </div>
             ))}
