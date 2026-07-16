@@ -129,6 +129,7 @@ export const AboutPage: React.FC = () => {
             
             <div className="relative w-full h-full rounded-[2rem] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.08)] border-[6px] border-white animate-float group hover:border-green-100 transition-colors duration-500">
               <img 
+
                 src="/images/ee.png" 
                 alt="เกี่ยวกับ PDA BLISS" 
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out" 
