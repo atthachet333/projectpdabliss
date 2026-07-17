@@ -5,6 +5,7 @@ import {
   Briefcase, Lock, CheckCircle2, ChevronRight, 
   Zap, Shield, Users, MapPin, Sparkles, ThumbsUp, Star, Globe
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { logUserAction } from '../utils/logger';
 
 export const AboutPage: React.FC = () => {
@@ -383,12 +384,12 @@ export const AboutPage: React.FC = () => {
           </div>
           
           <div className="relative z-10 flex-shrink-0">
-            <button className="bg-white text-green-900 font-black py-3.5 px-8 rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.2)] hover:bg-green-50 hover:scale-105 hover:shadow-[0_10px_25px_rgba(34,197,94,0.4)] transition-all duration-300 flex items-center group/btn text-base">
+            <Link to="/contact" className="bg-white text-green-900 font-black py-3.5 px-8 rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.2)] hover:bg-green-50 hover:scale-105 hover:shadow-[0_10px_25px_rgba(34,197,94,0.4)] transition-all duration-300 flex items-center group/btn text-base">
               ติดต่อทีมงานผู้เชี่ยวชาญ 
               <div className="ml-3 bg-green-100 p-1.5 rounded-lg group-hover/btn:bg-green-200 transition-colors">
                  <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
               </div>
-            </button>
+            </Link>
           </div>
         </div>
       </section>

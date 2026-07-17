@@ -3,6 +3,7 @@ import {
   MessageCircle, FileText, Search, Send, BarChart, CheckCircle2, Truck,
   ChevronDown, ChevronUp, Clock, ShieldCheck, Heart, Zap, FileCheck, CheckCircle, ChevronRight, PhoneCall, Sparkles
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { logUserAction } from '../utils/logger';
 
 // --- Component สำหรับทำตัวเลขวิ่ง (Number Counter) ---
@@ -172,9 +173,9 @@ export const ProcessPage: React.FC = () => {
               </div>
 
               <div className="md:ml-auto relative z-10">
-                <button className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-green-600 text-green-700 text-sm font-bold rounded-xl hover:bg-green-600 hover:text-white hover:-translate-y-1 transition-all shadow-sm">
+                <Link to="/contact" className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-green-600 text-green-700 text-sm font-bold rounded-xl hover:bg-green-600 hover:text-white hover:-translate-y-1 transition-all shadow-sm">
                   <PhoneCall className="w-4 h-4" /> ปรึกษาทีมงาน
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -281,9 +282,9 @@ export const ProcessPage: React.FC = () => {
               <p className="text-[12px] text-gray-500 font-medium">ปรึกษาฟรี ไม่มีค่าใช้จ่าย | ตอบกลับรวดเร็ว</p>
             </div>
             <div className="flex flex-wrap justify-center lg:justify-end gap-3">
-              <button className="bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-8 rounded-full text-sm transition-all shadow-[0_4px_15px_rgba(22,163,74,0.3)] hover:shadow-[0_6px_20px_rgba(22,163,74,0.4)] hover:-translate-y-0.5 flex items-center group">
+              <Link to="/contact" className="bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-8 rounded-full text-sm transition-all shadow-[0_4px_15px_rgba(22,163,74,0.3)] hover:shadow-[0_6px_20px_rgba(22,163,74,0.4)] hover:-translate-y-0.5 flex items-center group">
                 <MessageCircle className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" /> ปรึกษาฟรี
-              </button>
+              </Link>
               <button className="bg-white border-2 border-green-700 text-green-700 hover:bg-green-50 font-bold py-3 px-8 rounded-full text-sm transition-all flex items-center hover:-translate-y-0.5">
                 <PhoneCall className="w-4 h-4 mr-2" /> 02-123-4567
               </button>

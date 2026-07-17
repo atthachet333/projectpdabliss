@@ -4,6 +4,9 @@ import {
   Send, ChevronRight, FileText, Clock, Sparkles
 } from 'lucide-react';
 import { logUserAction } from '../utils/logger';
+import { trackEvent, trackFormEvent } from '../utils/analytics';
+
+const contactApiUrl = `${import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4547'}/api/contact`;
 
 export const Footer: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -11,20 +14,37 @@ export const Footer: React.FC = () => {
     phone: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    trackFormEvent('contact_form_start', 'footer_urgent_contact');
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitMessage('');
+    trackFormEvent('contact_form_submit', 'footer_urgent_contact');
+    setIsSubmitting(true);
     try {
-      logUserAction('SUBMIT_FOOTER_FORM', formData);
+      const response = await fetch(contactApiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, subject: 'ฝากข้อความด่วน', pageUrl: window.location.href }),
+      });
+      if (!response.ok) throw new Error('Contact request failed');
+      trackFormEvent('contact_form_success', 'footer_urgent_contact', 'success');
+      logUserAction('SUBMIT_FOOTER_FORM', { location: 'Footer' });
+      setSubmitMessage('ส่งข้อความเรียบร้อยแล้ว เจ้าหน้าที่จะติดต่อกลับโดยเร็วที่สุด');
+      setFormData({ name: '', phone: '', message: '' });
     } catch (err) {
+      trackFormEvent('contact_form_error', 'footer_urgent_contact', 'error');
       console.error(err);
+      setSubmitMessage('ไม่สามารถส่งข้อความได้ กรุณาลองใหม่อีกครั้ง');
+    } finally {
+      setIsSubmitting(false);
     }
-    alert('ระบบได้รับข้อความของคุณเรียบร้อยแล้วครับ เจ้าหน้าที่จะติดต่อกลับโดยเร็วที่สุด');
-    setFormData({ name: '', phone: '', message: '' });
   };
 
   const servicesList = [
@@ -69,7 +89,7 @@ export const Footer: React.FC = () => {
             
             {/* ปุ่ม LINE ช่องทางติดต่อหลักพร้อม Hover Animation เด้งนุ่มๆ */}
             <div className="flex items-center gap-3 pt-2">
-              <a href="https://line.me" target="_blank" rel="noreferrer" className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 border border-gray-100 text-[#06C755] font-bold text-sm hover:bg-[#06C755] hover:text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(6,199,85,0.25)] transition-all duration-300 group shadow-sm">
+              <a href="https://line.me/R/ti/p/@593oiwec" target="_blank" rel="noopener noreferrer" data-analytics-id="line_official_contact" onClick={() => trackEvent('line_click', 'line_official_contact', { metadata: { linkType: 'line' } })} className="flex cursor-pointer items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 border border-gray-100 text-[#06C755] font-bold text-sm hover:bg-[#06C755] hover:text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(6,199,85,0.25)] transition-all duration-300 group shadow-sm">
                 <MessageCircle className="w-4 h-4 fill-current text-[#06C755] group-hover:text-white transition-colors" />
                 <span>ติดต่อผ่าน LINE Official</span>
               </a>
@@ -160,9 +180,10 @@ export const Footer: React.FC = () => {
                   value={formData.message} onChange={handleInputChange}
                   className="w-full text-[12px] bg-white/70 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:bg-white focus:border-green-400 focus:ring-2 focus:ring-green-500/10 resize-none transition-all placeholder:text-gray-400"
                 ></textarea>
-                <button type="submit" className="w-full bg-green-700 hover:bg-green-800 text-white text-[13px] font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center shadow-md active:scale-95 group">
-                  ส่งข้อความ <Send className="w-3.5 h-3.5 ml-2 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
+                <button type="submit" disabled={isSubmitting} data-analytics-id="footer_urgent_contact_submit" className="w-full bg-green-700 hover:bg-green-800 text-white text-[13px] font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center shadow-md active:scale-95 group">
+                  {isSubmitting ? 'กำลังส่ง...' : 'ส่งข้อความ'} <Send className="w-3.5 h-3.5 ml-2 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
                 </button>
+                {submitMessage && <p className="text-[11px] text-gray-500 font-medium">{submitMessage}</p>}
               </form>
             </div>
           </div>

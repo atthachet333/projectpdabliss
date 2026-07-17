@@ -5,6 +5,9 @@ import {
   CheckCircle2, Clock, UserCheck, Zap, ShieldCheck, Heart, Send, Sparkles, ChevronRight
 } from 'lucide-react';
 import { logUserAction } from '../utils/logger';
+import { trackEvent, trackFormEvent } from '../utils/analytics';
+
+const contactApiUrl = `${import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4547'}/api/contact`;
 
 export const ServicesPage: React.FC = () => {
   useEffect(() => {
@@ -18,16 +21,36 @@ export const ServicesPage: React.FC = () => {
     service: '',
     details: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    trackFormEvent('contact_form_start', 'services_page_form');
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    logUserAction('SUBMIT_SERVICE_FORM', formData);
-    alert('ระบบได้รับข้อมูลของคุณและบันทึก Log เรียบร้อยแล้วครับ เจ้าหน้าที่จะติดต่อกลับโดยเร็วที่สุด');
-    setFormData({ name: '', phone: '', email: '', service: '', details: '' }); 
+    setSubmitMessage('');
+    trackFormEvent('contact_form_submit', 'services_page_form');
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(contactApiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, pageUrl: window.location.href }),
+      });
+      if (!response.ok) throw new Error('Contact request failed');
+      trackFormEvent('contact_form_success', 'services_page_form', 'success');
+      logUserAction('SUBMIT_SERVICE_FORM', { page: 'services' });
+      setSubmitMessage('ส่งข้อความเรียบร้อยแล้ว เจ้าหน้าที่จะติดต่อกลับโดยเร็วที่สุด');
+      setFormData({ name: '', phone: '', email: '', service: '', details: '' });
+    } catch {
+      trackFormEvent('contact_form_error', 'services_page_form', 'error');
+      setSubmitMessage('ไม่สามารถส่งข้อความได้ กรุณาลองใหม่อีกครั้ง');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const services = [
@@ -76,8 +99,9 @@ export const ServicesPage: React.FC = () => {
               <div 
                 key={service.id} 
                 className="relative bg-white p-8 rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-100 hover:border-green-300 hover:shadow-[0_15px_40px_rgba(34,197,94,0.12)] hover:-translate-y-2 transition-all duration-500 cursor-pointer group overflow-hidden flex flex-col"
+                data-analytics-id={`service_${service.id}`}
                 style={{ animationDelay: `${idx * 100}ms` }}
-                onClick={() => logUserAction('CLICK_SERVICE_DETAIL', { serviceId: service.id, serviceName: service.title })}
+                onClick={() => trackEvent('service_click', `service_${service.id}`, { metadata: { serviceKey: service.id } })}
               >
                 {/* ลายน้ำตัวเลขพื้นหลัง */}
                 <div className="absolute -bottom-4 -right-2 text-9xl font-black text-gray-50 group-hover:text-green-50 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-700 pointer-events-none z-0">
@@ -136,7 +160,7 @@ export const ServicesPage: React.FC = () => {
                   ].map((item, idx) => (
                     <div key={idx} className="flex items-center gap-4 group cursor-default">
                       <div className="text-green-600 bg-green-50 p-3.5 rounded-2xl group-hover:scale-110 group-hover:bg-green-600 group-hover:text-white transition-all duration-300 group-hover:rotate-6">
-                        {React.cloneElement(item.icon as React.ReactElement, { className: 'w-6 h-6' })}
+                        {React.cloneElement(item.icon as React.ReactElement<{ className?: string }>, { className: 'w-6 h-6' })}
                       </div>
                       <div>
                         <h5 className="font-bold text-gray-950 text-[14px] mb-1 group-hover:text-green-700 transition-colors">{item.title}</h5>
@@ -226,9 +250,10 @@ export const ServicesPage: React.FC = () => {
                       <label className="block text-[12px] font-bold text-gray-700 mb-2 ml-1">รายละเอียดเพิ่มเติม</label>
                       <textarea name="details" rows={3} value={formData.details} onChange={handleInputChange} className="w-full text-[14px] placeholder:text-gray-400 text-gray-900 border border-gray-200 rounded-2xl px-5 py-3.5 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 focus:outline-none resize-none bg-gray-50/50 transition-all hover:bg-white" placeholder="ระบุความต้องการของคุณเพิ่มเติม..."></textarea>
                     </div>
-                    <button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4.5 rounded-2xl transition-all duration-300 flex items-center justify-center text-[15px] shadow-[0_8px_20px_rgba(22,163,74,0.25)] hover:shadow-[0_15px_30px_rgba(22,163,74,0.35)] hover:-translate-y-1 active:scale-95 group mt-4 h-14">
-                      ส่งข้อมูลเพื่อรับคำปรึกษา <Send className="w-5 h-5 ml-2.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    <button type="submit" disabled={isSubmitting} data-analytics-id="services_page_form_submit" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4.5 rounded-2xl transition-all duration-300 flex items-center justify-center text-[15px] shadow-[0_8px_20px_rgba(22,163,74,0.25)] hover:shadow-[0_15px_30px_rgba(22,163,74,0.35)] hover:-translate-y-1 active:scale-95 group mt-4 h-14">
+                      {isSubmitting ? 'กำลังส่ง...' : 'ส่งข้อมูลเพื่อรับคำปรึกษา'} <Send className="w-5 h-5 ml-2.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                     </button>
+                    {submitMessage && <p className="text-[12px] text-gray-500 font-medium">{submitMessage}</p>}
                   </form>
                 </div>
               </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { MessageCircle } from 'lucide-react';
 import { logUserAction } from '../utils/logger';
+import { trackNavigation } from '../utils/analytics';
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
@@ -13,11 +14,6 @@ export const Navbar: React.FC = () => {
     { name: 'ขั้นตอนบริการ', path: '/process' },
     { name: 'ติดต่อเรา', path: '/contact' },
   ];
-
-  const handleConsultClick = () => {
-    logUserAction('CLICK_CONSULT_BUTTON', { location: 'Navbar' });
-    alert('บันทึก Log การกดปุ่ม "ปรึกษาฟรี" จาก Navbar แล้ว!');
-  };
 
   return (
     /* เปลี่ยนพื้นหลังเป็น bg-white/85 และใส่ backdrop-blur-md */
@@ -48,6 +44,8 @@ export const Navbar: React.FC = () => {
               <Link
                 key={link.name}
                 to={link.path}
+                data-analytics-id={`navbar_${link.path === '/' ? 'home' : link.path.slice(1)}`}
+                onClick={() => trackNavigation(`navbar_${link.path === '/' ? 'home' : link.path.slice(1)}`, link.path)}
                 className={`${
                   location.pathname === link.path || (link.name === 'หน้าแรก' && location.pathname === '/')
                     ? 'text-green-700 font-bold border-b-[3px] border-green-700 pb-1.5'
@@ -60,13 +58,15 @@ export const Navbar: React.FC = () => {
           </div>
 
           <div className="flex items-center flex-shrink-0 z-10">
-            <button 
-              onClick={handleConsultClick}
+            <Link
+              to="/contact"
+              data-analytics-id="navbar_free_consultation"
+              onClick={() => logUserAction('CLICK_CONSULT_BUTTON', { location: 'Navbar' })}
               className="bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-md text-[14px] font-bold flex items-center transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 whitespace-nowrap"
             >
               <MessageCircle className="w-4 h-4 mr-2" />
               ปรึกษาฟรี
-            </button>
+            </Link>
           </div>
 
         </div>

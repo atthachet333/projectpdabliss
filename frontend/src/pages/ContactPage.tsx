@@ -4,6 +4,9 @@ import {
   Send, Sparkles, ShieldCheck, HeartHandshake, Zap, Globe, ArrowRight, CheckCircle2, Image as ImageIcon, Lock, Award, Star
 } from 'lucide-react';
 import { logUserAction } from '../utils/logger';
+import { trackFormEvent } from '../utils/analytics';
+
+const contactApiUrl = `${import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4547'}/api/contact`;
 
 export const ContactPage: React.FC = () => {
   useEffect(() => {
@@ -18,22 +21,43 @@ export const ContactPage: React.FC = () => {
     message: '',
     consent: false
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    trackFormEvent('contact_form_start', 'contact_page_form');
     const target = e.target as HTMLInputElement;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     setFormData({ ...formData, [target.name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitMessage('');
+    trackFormEvent('contact_form_submit', 'contact_page_form');
     if (!formData.consent) {
-      alert('กรุณากดยอมรับเงื่อนไขการเก็บข้อมูลก่อนส่งข้อความครับ');
+      trackFormEvent('contact_form_error', 'contact_page_form', 'error');
+      setSubmitMessage('ไม่สามารถส่งข้อความได้ กรุณาลองใหม่อีกครั้ง');
       return;
     }
-    logUserAction('SUBMIT_CONTACT_FORM', formData);
-    alert('ส่งข้อความสำเร็จ! ระบบได้บันทึก Log และเจ้าหน้าที่จะติดต่อกลับโดยเร็วที่สุดครับ');
-    setFormData({ name: '', phone: '', email: '', topic: '', message: '', consent: false }); 
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(contactApiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, pageUrl: window.location.href }),
+      });
+      if (!response.ok) throw new Error('Contact request failed');
+      trackFormEvent('contact_form_success', 'contact_page_form', 'success');
+      logUserAction('SUBMIT_CONTACT_FORM', { page: 'contact' });
+      setSubmitMessage('ส่งข้อความเรียบร้อยแล้ว เจ้าหน้าที่จะติดต่อกลับโดยเร็วที่สุด');
+      setFormData({ name: '', phone: '', email: '', topic: '', message: '', consent: false });
+    } catch {
+      trackFormEvent('contact_form_error', 'contact_page_form', 'error');
+      setSubmitMessage('ไม่สามารถส่งข้อความได้ กรุณาลองใหม่อีกครั้ง');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const servicesList = [
@@ -152,9 +176,10 @@ export const ContactPage: React.FC = () => {
                   <span className="text-[11px] text-gray-600 font-medium leading-relaxed">ฉันยินยอมให้เก็บข้อมูลเพื่อติดต่อกลับและนำเสนอสิทธิประโยชน์ ตามนโยบายการรักษาข้อมูล <span className="text-green-700 font-bold">(PDPA)</span></span>
                 </label>
                 
-                <button type="submit" className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-4 rounded-xl transition-all duration-300 flex items-center justify-center text-[15px] shadow-[0_5px_15px_rgba(22,163,74,0.25)] hover:shadow-[0_10px_25px_rgba(22,163,74,0.35)] hover:-translate-y-0.5 active:scale-95 group mt-2 animate-shimmer">
-                  ส่งข้อมูล <Send className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                <button type="submit" disabled={isSubmitting} data-analytics-id="contact_page_form_submit" className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-4 rounded-xl transition-all duration-300 flex items-center justify-center text-[15px] shadow-[0_5px_15px_rgba(22,163,74,0.25)] hover:shadow-[0_10px_25px_rgba(22,163,74,0.35)] hover:-translate-y-0.5 active:scale-95 group mt-2 animate-shimmer">
+                  {isSubmitting ? 'กำลังส่ง...' : 'ส่งข้อมูล'} <Send className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </button>
+                {submitMessage && <p className="text-[12px] text-gray-500 font-medium">{submitMessage}</p>}
               </form>
             </div>
 

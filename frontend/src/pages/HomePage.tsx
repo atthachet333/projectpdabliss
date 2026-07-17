@@ -5,6 +5,7 @@ import {
   ShieldCheck, Zap, Heart, MessageSquare, 
   Search, ChevronRight, CheckCircle2, ChevronDown, Star, ArrowRight, Sparkles
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { logUserAction } from '../utils/logger';
 
 export const HomePage: React.FC = () => {
@@ -12,12 +13,12 @@ export const HomePage: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(0); 
 
   const services = [
-    { id: '01', title: 'แจ้งเข้า -\nเปลี่ยนย้ายนายจ้าง', icon: <Users className="w-8 h-8" /> },
-    { id: '02', title: 'ขึ้นทะเบียนแรงงาน', icon: <FileText className="w-8 h-8" /> },
-    { id: '03', title: 'รายงานตัว 90D', icon: <CalendarDays className="w-8 h-8" /> },
-    { id: '04', title: 'แจ้งออก -\nของพนักงาน', icon: <LogOut className="w-8 h-8" /> },
-    { id: '05', title: 'ทำเล่ม CI,\nPassport, PJ', icon: <BookOpen className="w-8 h-8" /> },
-    { id: '06', title: 'ต่อ มติ ต่างๆ', icon: <FileCheck className="w-8 h-8" /> },
+    { id: '01', title: 'แจ้งเข้า -\nเปลี่ยนย้ายนายจ้าง', icon: <Users className="w-8 h-8" />, route: '/services', intendedRoute: '/services/employee-transfer' },
+    { id: '02', title: 'ขึ้นทะเบียนแรงงาน', icon: <FileText className="w-8 h-8" />, route: '/services', intendedRoute: '/services/registration' },
+    { id: '03', title: 'รายงานตัว 90D', icon: <CalendarDays className="w-8 h-8" />, route: '/services', intendedRoute: '/services/90-days' },
+    { id: '04', title: 'แจ้งออก -\nของพนักงาน', icon: <LogOut className="w-8 h-8" />, route: '/services', intendedRoute: '/services/employee-exit' },
+    { id: '05', title: 'ทำเล่ม CI,\nPassport, PJ', icon: <BookOpen className="w-8 h-8" />, route: '/services', intendedRoute: '/services/passport' },
+    { id: '06', title: 'ต่อ มติ ต่างๆ', icon: <FileCheck className="w-8 h-8" />, route: '/services', intendedRoute: '/services/resolution-extension' },
   ];
 
   const faqs = [
@@ -34,11 +35,6 @@ export const HomePage: React.FC = () => {
       a: 'ได้แน่นอนครับ! เรามีบริการให้คำปรึกษาฟรี ไม่มีค่าใช้จ่ายเบื้องต้น สามารถทัก Line หรือโทรสอบถามได้ในเวลาทำการ ทีมงานผู้เชี่ยวชาญพร้อมดูแลครับ' 
     }
   ];
-
-  const handleConsultClick = () => {
-    logUserAction('CLICK_CONSULT_BUTTON', { location: 'HomePage_Hero' });
-    alert('ระบบบันทึก Log การกดปุ่ม "สอบถามบริการ" เรียบร้อยครับ! เจ้าหน้าที่จะติดต่อกลับโดยเร็ว');
-  };
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -108,16 +104,17 @@ export const HomePage: React.FC = () => {
             </p>
             
             <div className="flex flex-wrap gap-4 items-center">
-              <button 
-                onClick={handleConsultClick}
+              <Link
+                to="/contact"
+                onClick={() => logUserAction('CLICK_CONSULT_BUTTON', { location: 'HomePage_Hero' })}
                 className="bg-gradient-to-r from-green-700 to-green-600 text-white font-bold py-4 px-10 text-lg rounded-2xl shadow-[0_10px_30px_rgba(22,163,74,0.3)] hover:shadow-[0_15px_40px_rgba(22,163,74,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center group relative overflow-hidden"
               >
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                 <span className="relative z-10 flex items-center">สอบถามบริการ <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1.5 transition-transform" /></span>
-              </button>
-              <button className="bg-white text-gray-700 border-2 border-gray-200 font-bold py-4 px-10 text-lg rounded-2xl shadow-sm hover:border-green-500 hover:text-green-700 hover:bg-green-50 transition-all duration-300 flex items-center group">
+              </Link>
+              <Link to="/services" data-analytics-id="hero_view_all_services" onClick={() => logUserAction('NAV_VIEW_SERVICES', { path: '/services' })} className="bg-white text-gray-700 border-2 border-gray-200 font-bold py-4 px-10 text-lg rounded-2xl shadow-sm hover:border-green-500 hover:text-green-700 hover:bg-green-50 transition-all duration-300 flex items-center group">
                 ดูบริการทั้งหมด <ChevronRight className="ml-1 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+              </Link>
             </div>
 
             {/* เพิ่ม Trust Badge */}
@@ -169,7 +166,7 @@ export const HomePage: React.FC = () => {
           ].map((stat, idx) => (
             <div key={idx} className="flex items-center gap-4 px-6 py-5 flex-1 hover:-translate-y-2 transition-transform duration-300 cursor-default group bg-white hover:bg-green-50/50 rounded-2xl">
               <div className="flex-shrink-0 bg-green-50 p-3.5 rounded-2xl text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors duration-300 shadow-sm group-hover:shadow-green-200 group-hover:scale-110">
-                {React.cloneElement(stat.icon as React.ReactElement, { className: "w-6 h-6" })}
+                {React.cloneElement(stat.icon as React.ReactElement<{ className?: string }>, { className: "w-6 h-6" })}
               </div>
               <div>
                 <h4 className="font-bold text-gray-900 text-[15px] group-hover:text-green-700 transition-colors">{stat.title}</h4>
@@ -196,10 +193,18 @@ export const HomePage: React.FC = () => {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 relative z-10">
               {services.map((service) => (
-                <div 
+                <Link
                   key={service.id} 
-                  className="relative bg-gray-50/50 p-6 rounded-2xl border border-gray-100 hover:border-green-400 hover:bg-white hover:shadow-[0_10px_25px_rgba(34,197,94,0.15)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer group flex flex-col justify-between overflow-hidden"
-                  onClick={() => logUserAction('VIEW_SERVICE_DETAIL', { serviceId: service.id, serviceName: service.title })}
+                  to={service.route}
+                  className="relative bg-gray-50/50 p-6 rounded-2xl border border-gray-100 hover:border-green-400 hover:bg-white hover:shadow-[0_10px_25px_rgba(34,197,94,0.15)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer group flex flex-col justify-between overflow-hidden focus:outline-none focus-visible:ring-4 focus-visible:ring-green-200"
+                  data-analytics-id={`service_card_${service.id}`}
+                  onClick={() => logUserAction('VIEW_SERVICE_DETAIL', { serviceId: service.id, serviceName: service.title, route: service.intendedRoute })}
+                  onKeyDown={(event) => {
+                    if (event.key === ' ') {
+                      event.preventDefault();
+                      event.currentTarget.click();
+                    }
+                  }}
                 >
                   {/* ลายน้ำตัวเลข (Watermark) ใหญ่ๆ */}
                   <div className="absolute -bottom-4 -right-2 text-6xl font-black text-gray-100 group-hover:text-green-50 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 z-0 select-none">
@@ -208,13 +213,13 @@ export const HomePage: React.FC = () => {
 
                   <div className="flex justify-between items-start mb-6 relative z-10">
                     <div className="text-gray-400 bg-white p-3 rounded-xl shadow-sm group-hover:bg-green-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
-                      {React.cloneElement(service.icon, { className: "w-6 h-6" })}
+                      {React.cloneElement(service.icon as React.ReactElement<{ className?: string }>, { className: "w-6 h-6" })}
                     </div>
                   </div>
                   <h3 className="font-bold text-gray-800 text-[14px] leading-relaxed group-hover:text-green-700 transition-colors whitespace-pre-line relative z-10">
                     {service.title}
                   </h3>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -239,7 +244,7 @@ export const HomePage: React.FC = () => {
                 ].map((item, idx) => (
                   <div key={idx} className="text-center group flex flex-col items-center hover:-translate-y-2 transition-transform duration-300 cursor-default">
                     <div className="w-16 h-16 rounded-2xl bg-gray-50 border border-gray-100 shadow-sm text-green-600 flex items-center justify-center mb-5 group-hover:bg-green-600 group-hover:text-white group-hover:rotate-6 transition-all duration-300">
-                      {React.cloneElement(item.icon, { className: "w-7 h-7" })}
+                      {React.cloneElement(item.icon as React.ReactElement<{ className?: string }>, { className: "w-7 h-7" })}
                     </div>
                     <h4 className="font-bold text-gray-900 text-[14px] mb-2 group-hover:text-green-700 transition-colors">{item.title}</h4>
                     <p className="text-[12px] text-gray-500 whitespace-pre-line leading-relaxed font-medium">{item.desc}</p>
@@ -314,12 +319,14 @@ export const HomePage: React.FC = () => {
             
             <h2 className="text-3xl md:text-4xl font-black text-white mb-4 relative z-10">พร้อมให้เราดูแลเอกสารของคุณแล้วหรือยัง?</h2>
             <p className="text-green-100 text-lg mb-8 relative z-10 max-w-2xl mx-auto">ติดต่อทีมงานผู้เชี่ยวชาญของเราวันนี้ ปรึกษาฟรี ไม่มีค่าใช้จ่ายเบื้องต้น</p>
-            <button 
-              onClick={handleConsultClick}
+            <Link
+              to="/contact"
+              data-analytics-id="home_banner_contact_consultation"
+              onClick={() => logUserAction('CLICK_CONSULT_BUTTON', { location: 'HomePage_Banner' })}
               className="relative z-10 bg-white text-green-800 font-bold py-4 px-10 rounded-full shadow-[0_10px_20px_rgba(0,0,0,0.2)] hover:scale-105 hover:shadow-[0_15px_30px_rgba(0,0,0,0.3)] transition-all duration-300 flex items-center mx-auto group"
             >
               ติดต่อรับคำปรึกษา <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
-            </button>
+            </Link>
          </div>
       </section>
 
