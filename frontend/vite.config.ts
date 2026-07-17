@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
+const backendTarget = 'https://pdabliss.chaiyadetprogress.com';
+
 export default defineConfig({
   plugins: [
     react(),
@@ -12,7 +14,7 @@ export default defineConfig({
             next();
             return;
           }
-          const response = await fetch(`http://localhost:4547${req.url}`);
+          const response = await fetch(`${backendTarget}${req.url}`);
           res.statusCode = response.status;
           res.setHeader('content-type', response.headers.get('content-type') ?? 'text/plain');
           res.end(await response.text());
@@ -25,9 +27,15 @@ export default defineConfig({
     port: 4546,
     strictPort: true,
     proxy: {
-      '/api': 'http://localhost:4547',
-      '/sitemap.xml': 'http://localhost:4547',
-      '/robots.txt': 'http://localhost:4547',
+      '/api-proxy': {
+        target: backendTarget,
+        changeOrigin: true,
+        secure: false,
+        cookieDomainRewrite: '',
+        rewrite: path => path.replace(/^\/api-proxy/, ''),
+      },
+      '/sitemap.xml': backendTarget,
+      '/robots.txt': backendTarget,
     },
   },
   preview: { port: 4546, strictPort: true },

@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4547';
+import { API_BASE_URL } from '../config/api';
 const visitorKey = 'pda_analytics_visitor_id';
 const sessionKey = 'pda_analytics_session_id';
 const startedForms = new Set<string>();

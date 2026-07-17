@@ -19,7 +19,7 @@ copy .env.example .env
 npm run dev
 ```
 
-Backend: `http://localhost:4547`
+Backend: `pdabliss.chaiyadetprogress.com`
 
 ## คำสั่งสร้างโปรเจกต์จากศูนย์
 

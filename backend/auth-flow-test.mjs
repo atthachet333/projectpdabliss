@@ -2,20 +2,20 @@ import dotenv from 'dotenv';
 import Database from 'better-sqlite3';
 
 dotenv.config({ path: '.env' });
-const base = 'http://localhost:4547';
+const base = 'pdabliss.chaiyadetprogress.com';
 const email = process.env.DEFAULT_ADMIN_EMAIL;
 const password = process.env.DEFAULT_ADMIN_PASSWORD;
 const post = async (path, body, cookie = '') => {
   const response = await fetch(`${base}${path}`, {
     method: 'POST',
-    headers: { Origin: 'http://localhost:4546', 'Content-Type': 'application/json', ...(cookie ? { Cookie: cookie } : {}) },
+    headers: { Origin: 'pdabliss.chaiyadetprogress.com', 'Content-Type': 'application/json', ...(cookie ? { Cookie: cookie } : {}) },
     body: JSON.stringify(body),
   });
   return { response, body: await response.json().catch(() => ({})) };
 };
 const get = async (path, cookie = '') => {
   const response = await fetch(`${base}${path}`, {
-    headers: { Origin: 'http://localhost:4546', ...(cookie ? { Cookie: cookie } : {}) },
+    headers: { Origin: 'pdabliss.chaiyadetprogress.com', ...(cookie ? { Cookie: cookie } : {}) },
   });
   return { response, body: await response.json().catch(() => ({})) };
 };

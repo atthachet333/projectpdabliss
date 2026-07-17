@@ -1,6 +1,5 @@
 import { seoDefaults, type PublicSeoConfig } from '../seo/seo-defaults';
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4547';
+import { API_BASE_URL } from '../config/api';
 const cache = new Map<string, PublicSeoConfig>();
 
 export const getPublicSeo = async (path: string): Promise<PublicSeoConfig> => {

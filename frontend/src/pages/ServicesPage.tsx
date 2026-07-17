@@ -6,8 +6,9 @@ import {
 } from 'lucide-react';
 import { logUserAction } from '../utils/logger';
 import { trackEvent, trackFormEvent } from '../utils/analytics';
+import { API_BASE_URL } from '../config/api';
 
-const contactApiUrl = `${import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4547'}/api/contact`;
+const contactApiUrl = `${API_BASE_URL}/api/contact`;
 
 export const ServicesPage: React.FC = () => {
   useEffect(() => {
