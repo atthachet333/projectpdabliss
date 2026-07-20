@@ -67,7 +67,7 @@ export const ServicesPage: React.FC = () => {
     <div className="w-full pb-20 relative bg-slate-50/30">
       
       {/* 1. Hero Section - ปรับ Layout ใหม่ให้ดูพรีเมียมและมีมิติ */}
-      <section className="relative bg-transparent pt-20 pb-16 px-6 overflow-hidden">
+      <section className="relative bg-transparent pt-16 sm:pt-20 pb-14 sm:pb-16 px-4 sm:px-6 overflow-hidden">
         {/* แสง Glow พื้นหลัง */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-48 bg-green-400/15 blur-[120px] rounded-[100%] pointer-events-none"></div>
 
@@ -79,10 +79,10 @@ export const ServicesPage: React.FC = () => {
             <span>บริการเอกสารแบบ One-Stop Service</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-gray-950 via-green-900 to-green-600 drop-shadow-sm pb-2">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-gray-950 via-green-900 to-green-600 drop-shadow-sm pb-2">
             บริการเอกสาร
           </h1>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-6 leading-relaxed">
             รวดเร็ว ถูกต้อง เชื่อถือได้ <span className="text-green-600 relative inline-block">ดูแลครบ จบทุกขั้นตอน<span className="absolute -bottom-2 left-0 w-full h-1 bg-green-200 rounded-full opacity-50"></span></span>
           </h2>
           <p className="text-gray-600 max-w-2xl leading-relaxed font-medium text-[15px] md:text-lg">
@@ -93,13 +93,13 @@ export const ServicesPage: React.FC = () => {
       </section>
 
       {/* 2. Services Grid - เพิ่มลูกเล่น Card Hover */}
-      <section className="pb-20 px-6 relative z-10">
+      <section className="pb-16 sm:pb-20 px-4 sm:px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service, idx) => (
               <div 
                 key={service.id} 
-                className="relative bg-white p-8 rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-100 hover:border-green-300 hover:shadow-[0_15px_40px_rgba(34,197,94,0.12)] hover:-translate-y-2 transition-all duration-500 cursor-pointer group overflow-hidden flex flex-col"
+                className="relative bg-white p-6 sm:p-8 rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-100 hover:border-green-300 hover:shadow-[0_15px_40px_rgba(34,197,94,0.12)] hover:-translate-y-2 transition-all duration-500 cursor-pointer group overflow-hidden flex flex-col"
                 data-analytics-id={`service_${service.id}`}
                 style={{ animationDelay: `${idx * 100}ms` }}
                 onClick={() => trackEvent('service_click', `service_${service.id}`, { metadata: { serviceKey: service.id } })}
@@ -113,7 +113,7 @@ export const ServicesPage: React.FC = () => {
                   <div className="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-green-600 transition-all duration-500 group-hover:-rotate-6 group-hover:shadow-lg">
                      {React.cloneElement(service.icon, { className: 'w-7 h-7 text-green-700 group-hover:text-white transition-colors duration-500' })}
                   </div>
-                  <h4 className="font-bold text-gray-950 text-lg mb-3 group-hover:text-green-800 transition-colors flex items-center justify-between">
+                  <h4 className="font-bold text-gray-950 text-base sm:text-lg mb-3 group-hover:text-green-800 transition-colors flex items-center justify-between gap-3">
                     {service.title}
                     <ChevronRight className="w-5 h-5 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 text-green-600" />
                   </h4>
@@ -126,14 +126,14 @@ export const ServicesPage: React.FC = () => {
       </section>
 
       {/* 3. Info & Form Section */}
-      <section className="pb-16 px-6 relative">
+      <section className="pb-16 px-4 sm:px-6 relative">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 xl:grid-cols-[1.2fr,1.8fr] gap-8 xl:items-start">
             
             {/* ฝั่งซ้าย */}
             <div className="space-y-8 xl:sticky xl:top-28">
               {/* 3.1 เอกสารที่ต้องเตรียม */}
-              <div className="bg-white p-8 md:p-10 rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 hover:border-green-200 transition-colors duration-300">
+              <div className="bg-white p-6 sm:p-8 md:p-10 rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 hover:border-green-200 transition-colors duration-300">
                 <h4 className="font-bold text-gray-950 mb-6 text-[18px] flex items-center tracking-tight">
                   <div className="w-2 h-6 bg-green-500 rounded-full mr-3 shadow-sm"></div>เอกสารที่ลูกค้าต้องเตรียม
                 </h4>
@@ -148,7 +148,7 @@ export const ServicesPage: React.FC = () => {
               </div>
 
               {/* 3.2 ทำไมต้องเลือกเรา */}
-              <div className="bg-white p-8 md:p-10 rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 hover:border-green-200 transition-colors duration-300">
+              <div className="bg-white p-6 sm:p-8 md:p-10 rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 hover:border-green-200 transition-colors duration-300">
                 <h4 className="font-bold text-gray-950 mb-6 text-[18px] flex items-center tracking-tight">
                   <div className="w-2 h-6 bg-green-500 rounded-full mr-3 shadow-sm"></div>ทำไมต้องเลือก PDA BLISS
                 </h4>
@@ -176,7 +176,7 @@ export const ServicesPage: React.FC = () => {
             {/* ฝั่งขวา */}
             <div className="space-y-8">
               {/* 3.3 ระยะเวลาดำเนินงาน */}
-              <div className="bg-white p-8 md:p-10 rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 hover:border-green-200 transition-colors duration-300 flex flex-col md:flex-row gap-10 items-center">
+              <div className="bg-white p-6 sm:p-8 md:p-10 rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 hover:border-green-200 transition-colors duration-300 flex flex-col md:flex-row gap-8 md:gap-10 items-center">
                 <div className="flex-1 space-y-7 w-full">
                   <h4 className="font-bold text-gray-950 mb-4 text-[18px] flex items-center tracking-tight">
                     <div className="w-2 h-6 bg-green-500 rounded-full mr-3 shadow-sm"></div>ระยะเวลาโดยประมาณ
@@ -199,10 +199,11 @@ export const ServicesPage: React.FC = () => {
                 </div>
                 
                 {/* รูปภาพประกอบ */}
-                <div className="relative w-full md:w-[320px] h-[320px] rounded-[2rem] overflow-hidden shadow-xl border border-gray-100 group">
+                <div className="relative w-full md:w-[320px] h-64 sm:h-[320px] rounded-[2rem] overflow-hidden shadow-xl border border-gray-100 group">
                   <img 
                     src="/images/ser.png" 
                     alt="ขั้นตอนการทำงาน" 
+                    loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                   />
                   <div className="absolute inset-0 bg-gradient-to-tr from-green-900/20 to-transparent mix-blend-overlay group-hover:opacity-0 transition-opacity duration-500"></div>
@@ -210,15 +211,15 @@ export const ServicesPage: React.FC = () => {
               </div>
 
               {/* 3.4 Contact Form */}
-              <div className="bg-white p-8 md:p-12 rounded-3xl shadow-[0_10px_40px_rgba(34,197,94,0.08)] border border-green-200 relative overflow-hidden group">
+              <div className="bg-white p-6 sm:p-8 md:p-12 rounded-3xl shadow-[0_10px_40px_rgba(34,197,94,0.08)] border border-green-200 relative overflow-hidden group">
                 <div className="absolute -top-12 -right-12 p-4 opacity-5 pointer-events-none transition-transform duration-700 group-hover:scale-125 group-hover:-rotate-12">
                   <Send className="w-64 h-64 text-green-900" />
                 </div>
                 
                 <div className="relative z-10">
-                  <h4 className="font-bold text-gray-950 mb-2 text-[22px] tracking-tight flex items-center">
+                  <h4 className="font-bold text-gray-950 mb-2 text-[20px] sm:text-[22px] tracking-tight flex flex-wrap items-center gap-2">
                      สอบถามหรือใช้บริการ
-                     <span className="ml-4 text-[12px] bg-green-100 text-green-700 font-bold px-3 py-1 rounded-full border border-green-200">ปรึกษาฟรี</span>
+                     <span className="text-[12px] bg-green-100 text-green-700 font-bold px-3 py-1 rounded-full border border-green-200">ปรึกษาฟรี</span>
                   </h4>
                   <p className="text-[14px] text-gray-500 font-medium mb-8">ให้เราเป็นผู้ช่วยดูแลเอกสารของคุณ เจ้าหน้าที่จะติดต่อกลับโดยเร็วที่สุด</p>
                   
@@ -251,7 +252,7 @@ export const ServicesPage: React.FC = () => {
                       <label className="block text-[12px] font-bold text-gray-700 mb-2 ml-1">รายละเอียดเพิ่มเติม</label>
                       <textarea name="details" rows={3} value={formData.details} onChange={handleInputChange} className="w-full text-[14px] placeholder:text-gray-400 text-gray-900 border border-gray-200 rounded-2xl px-5 py-3.5 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 focus:outline-none resize-none bg-gray-50/50 transition-all hover:bg-white" placeholder="ระบุความต้องการของคุณเพิ่มเติม..."></textarea>
                     </div>
-                    <button type="submit" disabled={isSubmitting} data-analytics-id="services_page_form_submit" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4.5 rounded-2xl transition-all duration-300 flex items-center justify-center text-[15px] shadow-[0_8px_20px_rgba(22,163,74,0.25)] hover:shadow-[0_15px_30px_rgba(22,163,74,0.35)] hover:-translate-y-1 active:scale-95 group mt-4 h-14">
+                    <button type="submit" disabled={isSubmitting} data-analytics-id="services_page_form_submit" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-2xl transition-all duration-300 flex min-h-14 items-center justify-center text-[15px] shadow-[0_8px_20px_rgba(22,163,74,0.25)] hover:shadow-[0_15px_30px_rgba(22,163,74,0.35)] hover:-translate-y-1 active:scale-95 group mt-4">
                       {isSubmitting ? 'กำลังส่ง...' : 'ส่งข้อมูลเพื่อรับคำปรึกษา'} <Send className="w-5 h-5 ml-2.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                     </button>
                     {submitMessage && <p className="text-[12px] text-gray-500 font-medium">{submitMessage}</p>}

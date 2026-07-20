@@ -81,8 +81,8 @@ export const AboutPage: React.FC = () => {
       `}</style>
 
       {/* 1. Hero Section */}
-      <section className="relative bg-white pt-20 pb-28 px-6 overflow-hidden border-b border-gray-100">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-green-200/30 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse pointer-events-none translate-x-1/3 -translate-y-1/4"></div>
+      <section className="relative bg-white pt-16 sm:pt-20 pb-20 sm:pb-28 px-4 sm:px-6 overflow-hidden border-b border-gray-100">
+        <div className="absolute top-0 right-0 h-72 w-72 sm:h-[500px] sm:w-[500px] bg-green-200/30 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse pointer-events-none translate-x-1/3 -translate-y-1/4"></div>
         <div className="absolute bottom-0 left-0 w-[350px] h-[350px] bg-emerald-100/40 rounded-full mix-blend-multiply filter blur-[80px] pointer-events-none -translate-x-1/2 translate-y-1/2"></div>
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
@@ -94,7 +94,7 @@ export const AboutPage: React.FC = () => {
             </div>
             
             {/* ลดขนาดฟอนต์จาก 7xl ลงมาเป็น 5xl และใช้ชื่อจริง */}
-            <h1 className="text-4xl md:text-5xl lg:text-[3.2rem] font-black mb-4 leading-[1.2] text-gray-900 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.2rem] font-black mb-4 leading-[1.2] text-gray-900 tracking-tight break-words">
               เกี่ยวกับเรา<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 via-emerald-500 to-green-800 animate-gradient-x drop-shadow-sm">
                 PDA BLISS COMPANY LIMITED
@@ -111,7 +111,7 @@ export const AboutPage: React.FC = () => {
               ด้วยทีมงานมืออาชีพที่มีประสบการณ์ยาวนาน
             </p>
 
-            <div className="mt-8 flex gap-6 items-center">
+            <div className="mt-8 flex flex-wrap gap-6 items-center">
                <div className="flex flex-col group cursor-default">
                   <span className="text-3xl font-black text-green-700 group-hover:text-green-500 transition-colors">10+</span>
                   <span className="text-[11px] font-bold text-gray-500 mt-1">ปีแห่งประสบการณ์</span>
@@ -125,7 +125,7 @@ export const AboutPage: React.FC = () => {
           </div>
 
           {/* รูปภาพ Hero พร้อมขอบและแสงเรืองแสงสีเขียว */}
-          <div className="relative h-[380px] lg:h-[480px] w-full flex justify-center items-center perspective-1000">
+          <div className="relative h-[300px] sm:h-[380px] lg:h-[480px] w-full flex justify-center items-center perspective-1000">
             <div className="absolute inset-0 bg-gradient-to-tr from-green-300 to-emerald-100 rounded-[3rem] rotate-3 scale-95 animate-float-delayed opacity-50 -z-10 shadow-[0_0_40px_rgba(34,197,94,0.3)]"></div>
             
             <div className="relative w-full h-full rounded-[2rem] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.08)] border-[6px] border-white animate-float group hover:border-green-100 transition-colors duration-500">
@@ -140,7 +140,7 @@ export const AboutPage: React.FC = () => {
             </div>
 
             {/* Badge ลอยตัว */}
-            <div className="absolute -bottom-4 -left-4 bg-white p-4 rounded-xl shadow-lg border border-green-50 flex items-center gap-3 animate-float-delayed z-20 group-hover:-translate-y-2 transition-transform duration-300">
+            <div className="absolute bottom-3 left-3 sm:-bottom-4 sm:-left-4 bg-white p-3 sm:p-4 rounded-xl shadow-lg border border-green-50 flex items-center gap-3 animate-float-delayed z-20 group-hover:-translate-y-2 transition-transform duration-300">
               <div className="bg-green-50 p-2.5 rounded-full text-green-600 shadow-[0_0_15px_rgba(34,197,94,0.2)]"><ThumbsUp className="w-6 h-6" /></div>
               <div>
                 <p className="text-[11px] text-gray-500 font-bold mb-0.5">การันตีคุณภาพ</p>
@@ -152,7 +152,7 @@ export const AboutPage: React.FC = () => {
       </section>
 
       {/* 2. Highlights (Stats Bar) */}
-      <section className="max-w-7xl mx-auto px-6 relative z-20 -mt-12 mb-14">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 relative z-20 -mt-10 sm:-mt-12 mb-14">
         <div className="bg-white rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.05)] p-2 flex flex-wrap lg:flex-nowrap divide-y lg:divide-y-0 lg:divide-x divide-green-50 border border-green-50">
           {highlights.map((stat, idx) => (
             <div key={idx} className="flex items-center gap-4 px-5 py-5 w-full lg:w-1/5 bg-white hover:bg-green-50/60 rounded-xl transition-all duration-300 group cursor-default">
@@ -169,10 +169,10 @@ export const AboutPage: React.FC = () => {
       </section>
 
       {/* 3. Mission & Vision */}
-      <section className="max-w-7xl mx-auto px-6 mb-14">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-14">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           
-          <div className="bg-gradient-to-br from-gray-900 to-gray-800 p-8 md:p-10 rounded-3xl shadow-lg relative overflow-hidden group hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(34,197,94,0.15)] transition-all duration-500 border border-transparent hover:border-green-800/50">
+          <div className="bg-gradient-to-br from-gray-900 to-gray-800 p-6 sm:p-8 md:p-10 rounded-3xl shadow-lg relative overflow-hidden group hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(34,197,94,0.15)] transition-all duration-500 border border-transparent hover:border-green-800/50">
             <div className="absolute -right-6 -top-6 text-white/5 group-hover:text-green-500/10 group-hover:scale-110 transition-all duration-700 pointer-events-none">
               <Target className="w-56 h-56" />
             </div>
@@ -187,7 +187,7 @@ export const AboutPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-green-700 to-emerald-600 p-8 md:p-10 rounded-3xl shadow-lg relative overflow-hidden group hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(34,197,94,0.25)] transition-all duration-500">
+          <div className="bg-gradient-to-br from-green-700 to-emerald-600 p-6 sm:p-8 md:p-10 rounded-3xl shadow-lg relative overflow-hidden group hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(34,197,94,0.25)] transition-all duration-500">
             <div className="absolute -right-6 -top-6 text-white/10 group-hover:scale-110 transition-transform duration-700 pointer-events-none">
               <Eye className="w-56 h-56" />
             </div>
@@ -206,11 +206,11 @@ export const AboutPage: React.FC = () => {
       </section>
 
       {/* 4. Main Content Grid */}
-      <section className="max-w-7xl mx-auto px-6 mb-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           
           {/* Column 1: ภาพรวมบริษัท */}
-          <div className="bg-white p-8 rounded-3xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 h-full relative overflow-hidden group hover:border-green-300 hover:shadow-[0_8px_30px_rgba(34,197,94,0.1)] transition-all duration-500">
+          <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 h-full relative overflow-hidden group hover:border-green-300 hover:shadow-[0_8px_30px_rgba(34,197,94,0.1)] transition-all duration-500">
             <div className="absolute -bottom-10 -right-10 text-gray-50 group-hover:text-green-50 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700 pointer-events-none">
               <Globe className="w-48 h-48" />
             </div>
@@ -240,7 +240,7 @@ export const AboutPage: React.FC = () => {
           </div>
 
           {/* Column 2: ค่านิยมองค์กร */}
-          <div className="bg-white p-8 rounded-3xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 h-full relative overflow-hidden hover:border-green-300 hover:shadow-[0_8px_30px_rgba(34,197,94,0.1)] transition-all duration-500">
+          <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 h-full relative overflow-hidden hover:border-green-300 hover:shadow-[0_8px_30px_rgba(34,197,94,0.1)] transition-all duration-500">
             <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center relative z-10">
               <div className="w-1.5 h-6 bg-gradient-to-b from-green-400 to-green-600 rounded-full mr-3"></div>
               ค่านิยมองค์กร (Core Values)
@@ -262,7 +262,7 @@ export const AboutPage: React.FC = () => {
 
           {/* Column 3: จุดแข็ง + มาตรฐาน */}
           <div className="flex flex-col gap-6 h-full">
-            <div className="bg-white p-8 rounded-3xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 flex-1 relative group overflow-hidden hover:border-green-300 hover:shadow-[0_8px_30px_rgba(34,197,94,0.1)] transition-all duration-500">
+            <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 flex-1 relative group overflow-hidden hover:border-green-300 hover:shadow-[0_8px_30px_rgba(34,197,94,0.1)] transition-all duration-500">
                <div className="absolute -right-4 -bottom-4 text-green-50 pointer-events-none group-hover:text-green-100/60 group-hover:scale-110 transition-all duration-700">
                   <Award className="w-40 h-40" />
                </div>
@@ -285,7 +285,7 @@ export const AboutPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-8 rounded-3xl shadow-sm border border-green-100 flex-1 hover:border-green-300 hover:shadow-[0_8px_25px_rgba(34,197,94,0.15)] transition-all duration-500">
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 sm:p-8 rounded-3xl shadow-sm border border-green-100 flex-1 hover:border-green-300 hover:shadow-[0_8px_25px_rgba(34,197,94,0.15)] transition-all duration-500">
               <h3 className="text-lg font-black text-green-800 mb-4 flex items-center">
                 <ShieldCheck className="w-5 h-5 mr-2 text-green-600" /> มาตรฐานการบริการ
               </h3>
@@ -315,8 +315,8 @@ export const AboutPage: React.FC = () => {
       </section>
 
       {/* 5. Timeline แบบมีชีวิต */}
-      <section className="max-w-7xl mx-auto px-6 mb-20">
-        <div className="bg-white p-8 md:p-14 rounded-[2.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.03)] border border-gray-100 group/timeline hover:border-green-200 transition-colors" onMouseLeave={() => setHoveredYearIndex(null)}>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-20">
+        <div className="bg-white p-6 sm:p-8 md:p-14 rounded-[2.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.03)] border border-gray-100 group/timeline hover:border-green-200 transition-colors" onMouseLeave={() => setHoveredYearIndex(null)}>
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-3">เส้นทางการเติบโตของเรา</h2>
             <p className="text-sm text-gray-500 font-medium">ความสำเร็จที่สร้างจากความไว้วางใจของลูกค้าตลอดหลายปีที่ผ่านมา</p>
@@ -365,8 +365,8 @@ export const AboutPage: React.FC = () => {
       </section>
 
       {/* 6. Call to Action Banner */}
-      <section className="max-w-7xl mx-auto px-6">
-        <div className="bg-gradient-to-r from-gray-900 via-green-900 to-green-800 rounded-[2rem] shadow-xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between relative overflow-hidden group">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="bg-gradient-to-r from-gray-900 via-green-900 to-green-800 rounded-[2rem] shadow-xl p-6 sm:p-8 md:p-12 flex flex-col md:flex-row items-center justify-between relative overflow-hidden group gap-6">
           
           <div className="absolute right-0 top-0 opacity-10 transform translate-x-1/4 -translate-y-1/4 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-1000 pointer-events-none">
             <ShieldCheck className="w-[24rem] h-[24rem] text-white" />
@@ -383,8 +383,8 @@ export const AboutPage: React.FC = () => {
             </p>
           </div>
           
-          <div className="relative z-10 flex-shrink-0">
-            <Link to="/contact" className="bg-white text-green-900 font-black py-3.5 px-8 rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.2)] hover:bg-green-50 hover:scale-105 hover:shadow-[0_10px_25px_rgba(34,197,94,0.4)] transition-all duration-300 flex items-center group/btn text-base">
+          <div className="relative z-10 w-full flex-shrink-0 md:w-auto">
+            <Link to="/contact" className="bg-white text-green-900 font-black py-3.5 px-6 sm:px-8 rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.2)] hover:bg-green-50 hover:scale-105 hover:shadow-[0_10px_25px_rgba(34,197,94,0.4)] transition-all duration-300 flex min-h-11 items-center justify-center group/btn text-sm sm:text-base">
               ติดต่อทีมงานผู้เชี่ยวชาญ 
               <div className="ml-3 bg-green-100 p-1.5 rounded-lg group-hover/btn:bg-green-200 transition-colors">
                  <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />

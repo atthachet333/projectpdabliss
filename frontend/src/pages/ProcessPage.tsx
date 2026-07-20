@@ -63,15 +63,15 @@ export const ProcessPage: React.FC = () => {
     <div className="w-full pb-20 bg-[#F8FAFC]">
       
       {/* 1. Hero Section */}
-      <section className="bg-white pt-24 pb-20 px-6 relative overflow-hidden shadow-sm">
+      <section className="bg-white pt-16 sm:pt-20 lg:pt-24 pb-16 sm:pb-20 px-4 sm:px-6 relative overflow-hidden shadow-sm">
         <div className="absolute top-0 right-0 w-96 h-96 bg-green-50 rounded-full blur-3xl opacity-50 pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
         
-        <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row gap-16 items-center relative z-10">
+        <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row gap-10 lg:gap-16 items-center relative z-10">
           
           {/* ซ้าย: รูปภาพ */}
           <div className="flex-1 w-full relative group perspective-1000">
             <div className="absolute inset-0 bg-green-600 rounded-[2rem] transform rotate-3 scale-105 opacity-10 group-hover:rotate-6 transition-transform duration-700"></div>
-            <div className="relative w-full h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white group-hover:-translate-y-2 transition-all duration-700 ease-out z-10 bg-gray-100">
+            <div className="relative w-full h-64 sm:h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden shadow-2xl border-[6px] border-white group-hover:-translate-y-2 transition-all duration-700 ease-out z-10 bg-gray-100">
               <img 
                 src="/images/procress.png" 
                 alt="บริการเอกสาร" 
@@ -87,14 +87,14 @@ export const ProcessPage: React.FC = () => {
               <Sparkles className="w-4 h-4 text-green-600" />
               <span>บริการครบวงจร One-Stop Service</span>
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 leading-[1.1] tracking-tight">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 leading-[1.1] tracking-tight">
               ขั้นตอนบริการ & <br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-800 to-green-500">คำถามที่พบบ่อย</span>
             </h1>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-2">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 flex flex-wrap items-center gap-2 leading-relaxed">
               รวดเร็ว ถูกต้อง เชื่อถือได้ <span className="text-green-600 relative inline-block">ดูแลครบ จบทุกขั้นตอน<span className="absolute -bottom-1 left-0 w-full h-1 bg-green-200 rounded-full opacity-60"></span></span>
             </h2>
-            <p className="text-gray-500 text-lg leading-relaxed max-w-xl font-medium">
+            <p className="text-gray-500 text-base sm:text-lg leading-relaxed max-w-xl font-medium">
               ทีมงานมืออาชีพ พร้อมดูแลเอกสารของคุณอย่างถูกต้องตามกฎหมาย 
               ประหยัดเวลา ลดความกังวล ให้เราดูแลทุกขั้นตอนแทนคุณ
             </p>
@@ -104,18 +104,18 @@ export const ProcessPage: React.FC = () => {
       </section>
 
       {/* 2. Main Content Grid (ขั้นตอน & FAQ) */}
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 xl:grid-cols-[1.8fr,1.2fr] gap-8 mt-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 xl:grid-cols-[1.8fr,1.2fr] gap-8 mt-10 sm:mt-12">
         
         {/* ฝั่งซ้าย: ขั้นตอนการให้บริการ (เน้นความน่าเชื่อถือ และเส้นวิ่ง) */}
-        <section className="bg-white p-8 md:p-12 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 flex flex-col group/section hover:shadow-[0_15px_40px_rgb(34,197,94,0.08)] transition-shadow duration-500">
+        <section className="bg-white p-5 sm:p-8 md:p-12 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 flex flex-col group/section hover:shadow-[0_15px_40px_rgb(34,197,94,0.08)] transition-shadow duration-500">
           <div>
-            <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-12 flex items-center gap-3">
+            <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-8 sm:mb-12 flex items-center gap-3">
                <div className="w-2 h-8 bg-gradient-to-b from-green-400 to-green-700 rounded-full shadow-sm"></div>
                ขั้นตอนการให้บริการ
             </h3>
             
             {/* พื้นที่ของ Steps */}
-            <div className="flex flex-col md:flex-row justify-between items-start w-full relative group/steps pb-4">
+            <div className="flex flex-col gap-6 md:flex-row md:gap-0 justify-between items-start w-full relative group/steps pb-4">
               
               {/* เส้นประเชื่อม (พื้นหลัง) */}
               <div className="hidden md:block absolute top-8 left-10 right-10 h-[2px] border-t-[3px] border-dotted border-gray-200 z-0"></div>
@@ -124,7 +124,7 @@ export const ProcessPage: React.FC = () => {
               <div className="hidden md:block absolute top-[31px] left-10 right-10 h-[4px] bg-gradient-to-r from-green-400 to-green-600 z-0 origin-left scale-x-0 group-hover/steps:scale-x-100 transition-transform duration-1000 ease-in-out rounded-full shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
 
               {processSteps.map((step, idx) => (
-                <div key={step.id} className="relative z-10 flex flex-row md:flex-col items-center md:text-center group flex-1 cursor-default">
+                <div key={step.id} className="relative z-10 flex flex-row md:flex-col items-start md:items-center md:text-center group flex-1 cursor-default">
                   
                   {/* วงกลม Icon */}
                   <div className="relative w-16 h-16 rounded-full bg-white border-[4px] border-gray-50 flex items-center justify-center mb-5 flex-shrink-0 group-hover:border-green-500 group-hover:bg-green-600 group-hover:-translate-y-2 group-hover:shadow-[0_10px_20px_rgba(34,197,94,0.2)] transition-all duration-300 mr-4 md:mr-0 z-10">
@@ -153,7 +153,7 @@ export const ProcessPage: React.FC = () => {
 
           {/* ✨ ส่วนเติมเต็มช่องว่างที่เพิ่มเข้ามาใหม่ (Decorative Fill) ✨ */}
           <div className="flex-1 flex items-center justify-center py-10">
-            <div className="w-full bg-gradient-to-r from-gray-50 via-white to-green-50/30 border border-gray-100 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 relative overflow-hidden group/banner hover:shadow-md hover:border-green-200 transition-all duration-500">
+            <div className="w-full bg-gradient-to-r from-gray-50 via-white to-green-50/30 border border-gray-100 rounded-3xl p-5 sm:p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 relative overflow-hidden group/banner hover:shadow-md hover:border-green-200 transition-all duration-500">
               
               {/* ลายน้ำตกแต่ง */}
               <div className="absolute -right-6 -top-6 text-green-100/40 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-700 pointer-events-none">
@@ -173,7 +173,7 @@ export const ProcessPage: React.FC = () => {
               </div>
 
               <div className="md:ml-auto relative z-10">
-                <Link to="/contact" className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-green-600 text-green-700 text-sm font-bold rounded-xl hover:bg-green-600 hover:text-white hover:-translate-y-1 transition-all shadow-sm">
+                <Link to="/contact" className="flex min-h-11 items-center justify-center gap-2 px-6 py-3 bg-white border-2 border-green-600 text-green-700 text-sm font-bold rounded-xl hover:bg-green-600 hover:text-white hover:-translate-y-1 transition-all shadow-sm">
                   <PhoneCall className="w-4 h-4" /> ปรึกษาทีมงาน
                 </Link>
               </div>
@@ -181,7 +181,7 @@ export const ProcessPage: React.FC = () => {
           </div>
 
           {/* Badges ด้านล่าง (ดันลงมาด้วย mt-auto) */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-auto pt-8 border-t border-gray-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 mt-auto pt-8 border-t border-gray-100">
             {[
               { title: 'ประหยัดเวลา', icon: <Clock className="w-6 h-6" /> },
               { title: 'ถูกต้องตามกฎหมาย', icon: <ShieldCheck className="w-6 h-6" /> },
@@ -198,7 +198,7 @@ export const ProcessPage: React.FC = () => {
         </section>
 
         {/* ฝั่งขวา: FAQ */}
-        <section className="bg-white p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 h-full">
+        <section className="bg-white p-5 sm:p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 h-full">
           <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-8 flex items-center gap-3">
              <div className="w-2 h-8 bg-gradient-to-b from-green-400 to-green-700 rounded-full shadow-sm"></div>
              คำถามที่พบบ่อย (FAQ)
@@ -207,10 +207,10 @@ export const ProcessPage: React.FC = () => {
             {faqs.map((faq, index) => (
               <div key={index} className={`border rounded-2xl overflow-hidden transition-all duration-300 ${openFaqId === index ? 'border-green-300 shadow-[0_4px_20px_rgba(34,197,94,0.1)]' : 'border-gray-100 hover:border-green-200'}`}>
                 <button 
-                  className={`w-full flex justify-between items-center p-5 text-left transition-colors duration-300 ${openFaqId === index ? 'bg-green-50/50' : 'bg-white hover:bg-gray-50'}`}
+                  className={`w-full flex justify-between items-start gap-3 p-4 sm:p-5 text-left transition-colors duration-300 focus:outline-none focus-visible:ring-4 focus-visible:ring-green-200 ${openFaqId === index ? 'bg-green-50/50' : 'bg-white hover:bg-gray-50'}`}
                   onClick={() => toggleFaq(index, faq.q)}
                 >
-                  <span className="font-bold text-[14px] text-gray-900 flex items-center gap-3">
+                  <span className="font-bold text-[14px] text-gray-900 flex items-start gap-3">
                     <span className={`rounded-full w-6 h-6 flex items-center justify-center text-[11px] font-black transition-colors ${openFaqId === index ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-500'}`}>Q</span>
                     {faq.q}
                   </span>
@@ -231,8 +231,8 @@ export const ProcessPage: React.FC = () => {
       </div>
 
       {/* 3. Bottom Trust & Stats Section */}
-      <section className="max-w-7xl mx-auto px-6 mt-8">
-        <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 flex flex-col lg:flex-row items-center justify-between gap-10 hover:shadow-[0_15px_40px_rgb(0,0,0,0.06)] transition-shadow duration-500">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 mt-8">
+        <div className="bg-white p-5 sm:p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10 hover:shadow-[0_15px_40px_rgb(0,0,0,0.06)] transition-shadow duration-500">
           
           {/* Logo & Info */}
           <div className="flex flex-col md:flex-row items-center md:items-start gap-6 lg:w-1/3">
@@ -281,13 +281,13 @@ export const ProcessPage: React.FC = () => {
               <p className="text-[15px] font-bold text-gray-900 mb-1">พร้อมให้เราช่วยดูแลงานเอกสารของคุณ</p>
               <p className="text-[12px] text-gray-500 font-medium">ปรึกษาฟรี ไม่มีค่าใช้จ่าย | ตอบกลับรวดเร็ว</p>
             </div>
-            <div className="flex flex-wrap justify-center lg:justify-end gap-3">
-              <Link to="/contact" className="bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-8 rounded-full text-sm transition-all shadow-[0_4px_15px_rgba(22,163,74,0.3)] hover:shadow-[0_6px_20px_rgba(22,163,74,0.4)] hover:-translate-y-0.5 flex items-center group">
+            <div className="flex w-full flex-col sm:w-auto sm:flex-row sm:flex-wrap justify-center lg:justify-end gap-3">
+              <Link to="/contact" className="bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-8 rounded-full text-sm transition-all shadow-[0_4px_15px_rgba(22,163,74,0.3)] hover:shadow-[0_6px_20px_rgba(22,163,74,0.4)] hover:-translate-y-0.5 flex min-h-11 items-center justify-center group">
                 <MessageCircle className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" /> ปรึกษาฟรี
               </Link>
-              <button className="bg-white border-2 border-green-700 text-green-700 hover:bg-green-50 font-bold py-3 px-8 rounded-full text-sm transition-all flex items-center hover:-translate-y-0.5">
+              <a href="tel:021234567" className="bg-white border-2 border-green-700 text-green-700 hover:bg-green-50 font-bold py-3 px-8 rounded-full text-sm transition-all flex min-h-11 items-center justify-center hover:-translate-y-0.5">
                 <PhoneCall className="w-4 h-4 mr-2" /> 02-123-4567
-              </button>
+              </a>
             </div>
           </div>
 

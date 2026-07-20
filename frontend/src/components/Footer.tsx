@@ -59,38 +59,38 @@ export const Footer: React.FC = () => {
 
   return (
     // ดีไซน์โปร่งแสงสไตล์ Glassmorphism คุมโทนสีเขียวพรีเมียม สวยงามและมีชีวิตชีวา
-    <footer className="relative bg-white/70 backdrop-blur-xl border-t border-white/60 pt-16 pb-8 overflow-hidden shadow-[0_-10px_40px_rgba(0,0,0,0.02)]">
+    <footer className="relative bg-white/70 backdrop-blur-xl border-t border-white/60 pt-12 sm:pt-16 pb-8 overflow-hidden shadow-[0_-10px_40px_rgba(0,0,0,0.02)]">
       
       {/* แสง Glow พื้นหลังตกแต่งความสวยงามใต้กระจกขุ่น */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-green-100/40 rounded-full blur-[100px] pointer-events-none -translate-y-1/2"></div>
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-emerald-100/30 rounded-full blur-[80px] pointer-events-none translate-y-1/3"></div>
+      <div className="absolute top-0 left-1/4 h-72 w-72 sm:h-[500px] sm:w-[500px] bg-green-100/40 rounded-full blur-[100px] pointer-events-none -translate-y-1/2"></div>
+      <div className="absolute bottom-0 right-0 h-72 w-72 sm:h-[400px] sm:w-[400px] bg-emerald-100/30 rounded-full blur-[80px] pointer-events-none translate-y-1/3"></div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12 mb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 mb-12 sm:mb-16">
           
           {/* ================= คอลัมน์ 1: ข้อมูลแบรนด์ ชื่อเต็มบริษัท & LINE ช่องทางหลัก ================= */}
           <div className="lg:col-span-4 space-y-6">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <div className="flex items-center gap-3">
               {/* ตรงนี้คือจุดที่ควรใส่โลโก้ครับ */}
                 <img 
                   src="/images/logo.png" 
                   alt="PDA BLISS Logo" 
-                  className="h-16 w-auto object-contain" 
+                  className="h-14 sm:h-16 w-auto object-contain" 
                   />
                 </div>
               {/* ปรับเป็นชื่อเต็มบริษัทตามที่ขอครับ */}
-              <span className="text-xl md:text-2xl font-black text-gray-900 tracking-tight leading-tight block">
+              <span className="text-lg sm:text-xl md:text-2xl font-black text-gray-900 tracking-tight leading-tight block break-words">
                 PDA <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-500">BLISS COMPANY LIMITED</span>
               </span>
             </div>
-            <p className="text-[13px] text-gray-500 leading-relaxed font-medium pr-4">
+            <p className="text-[13px] text-gray-500 leading-relaxed font-medium sm:pr-4">
               ผู้เชี่ยวชาญด้านการจัดทำเอกสารแรงงานและธุรกิจแบบครบวงจร บริการรวดเร็ว โปร่งใส ตรวจสอบได้ ให้คุณมั่นใจและถูกต้องตามกฎหมาย 100%
             </p>
             
             {/* ปุ่ม LINE ช่องทางติดต่อหลักพร้อม Hover Animation เด้งนุ่มๆ */}
             <div className="flex items-center gap-3 pt-2">
-              <a href="https://line.me/R/ti/p/@593oiwec" target="_blank" rel="noopener noreferrer" data-analytics-id="line_official_contact" onClick={() => trackEvent('line_click', 'line_official_contact', { metadata: { linkType: 'line' } })} className="flex cursor-pointer items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 border border-gray-100 text-[#06C755] font-bold text-sm hover:bg-[#06C755] hover:text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(6,199,85,0.25)] transition-all duration-300 group shadow-sm">
+              <a href="https://line.me/R/ti/p/@593oiwec" target="_blank" rel="noopener noreferrer" data-analytics-id="line_official_contact" onClick={() => trackEvent('line_click', 'line_official_contact', { metadata: { linkType: 'line' } })} className="flex min-h-11 w-full cursor-pointer items-center justify-center gap-2.5 px-4 py-2 rounded-full bg-white/90 border border-gray-100 text-[#06C755] font-bold text-sm hover:bg-[#06C755] hover:text-white hover:-translate-y-1 hover:shadow-[0_5px_15px_rgba(6,199,85,0.25)] transition-all duration-300 group shadow-sm sm:w-auto">
                 <MessageCircle className="w-4 h-4 fill-current text-[#06C755] group-hover:text-white transition-colors" />
                 <span>ติดต่อผ่าน LINE Official</span>
               </a>
@@ -105,7 +105,7 @@ export const Footer: React.FC = () => {
             <ul className="space-y-3.5">
               {servicesList.map((service, idx) => (
                 <li key={idx}>
-                  <a href="/services" className="flex items-center text-[13px] text-gray-600 hover:text-green-700 font-medium transition-colors group">
+                  <a href="/services" className="flex min-h-8 items-start text-[13px] text-gray-600 hover:text-green-700 font-medium transition-colors group">
                     <ChevronRight className="w-4 h-4 mr-2 text-green-300 group-hover:text-green-600 group-hover:translate-x-1 transition-all duration-300" />
                     {service}
                   </a>
@@ -123,7 +123,7 @@ export const Footer: React.FC = () => {
               <ul className="space-y-3.5">
                 <li>
                   {/* เพิ่มลูกเล่น Hover ขยับยกลอย และเปลี่ยนสีไอคอนอย่างนุ่มนวล */}
-                  <a href="tel:021234567" className="flex items-center gap-3 text-gray-600 hover:text-green-700 hover:translate-x-1 transition-all duration-300 group">
+                  <a href="tel:021234567" className="flex min-h-11 items-center gap-3 text-gray-600 hover:text-green-700 hover:translate-x-1 transition-all duration-300 group">
                     <div className="p-2 bg-white/80 border border-gray-100 rounded-lg shadow-sm group-hover:bg-green-600 group-hover:text-white group-hover:rotate-6 transition-all duration-300">
                       <Phone className="w-3.5 h-3.5 text-green-600 group-hover:text-white" />
                     </div>
@@ -131,19 +131,19 @@ export const Footer: React.FC = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="flex items-center gap-3 text-gray-600 hover:text-green-700 hover:translate-x-1 transition-all duration-300 group">
+                  <span className="flex min-h-11 items-center gap-3 text-gray-600 transition-all duration-300 group">
                     <div className="p-2 bg-white/80 border border-gray-100 rounded-lg shadow-sm group-hover:bg-[#06C755] group-hover:text-white group-hover:rotate-6 transition-all duration-300">
                       <MessageCircle className="w-3.5 h-3.5 text-[#06C755] group-hover:text-white fill-current" />
                     </div>
                     <span className="text-[13px] font-black tracking-tight">@pdabliss</span>
-                  </a>
+                  </span>
                 </li>
                 <li>
-                  <a href="mailto:info@pdabliss.co.th" className="flex items-center gap-3 text-gray-600 hover:text-green-700 hover:translate-x-1 transition-all duration-300 group">
+                  <a href="mailto:info@pdabliss.co.th" className="flex min-h-11 items-center gap-3 text-gray-600 hover:text-green-700 hover:translate-x-1 transition-all duration-300 group">
                     <div className="p-2 bg-white/80 border border-gray-100 rounded-lg shadow-sm group-hover:bg-green-600 group-hover:text-white group-hover:rotate-6 transition-all duration-300">
                       <Mail className="w-3.5 h-3.5 text-green-600 group-hover:text-white" />
                     </div>
-                    <span className="text-[13px] font-black tracking-tight">info@pdabliss.co.th</span>
+                    <span className="text-[13px] font-black tracking-tight break-all">info@pdabliss.co.th</span>
                   </a>
                 </li>
               </ul>
@@ -181,7 +181,7 @@ export const Footer: React.FC = () => {
                   value={formData.message} onChange={handleInputChange}
                   className="w-full text-[12px] bg-white/70 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:bg-white focus:border-green-400 focus:ring-2 focus:ring-green-500/10 resize-none transition-all placeholder:text-gray-400"
                 ></textarea>
-                <button type="submit" disabled={isSubmitting} data-analytics-id="footer_urgent_contact_submit" className="w-full bg-green-700 hover:bg-green-800 text-white text-[13px] font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center shadow-md active:scale-95 group">
+                <button type="submit" disabled={isSubmitting} data-analytics-id="footer_urgent_contact_submit" className="w-full bg-green-700 hover:bg-green-800 text-white text-[13px] font-bold py-3.5 rounded-xl transition-all duration-300 flex min-h-11 items-center justify-center shadow-md active:scale-95 group">
                   {isSubmitting ? 'กำลังส่ง...' : 'ส่งข้อความ'} <Send className="w-3.5 h-3.5 ml-2 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
                 </button>
                 {submitMessage && <p className="text-[11px] text-gray-500 font-medium">{submitMessage}</p>}
@@ -192,13 +192,13 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* ================= Copyright ด้านล่างสุด ================= */}
-        <div className="border-t border-gray-200/50 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-[12px] text-gray-500 font-medium">
+        <div className="border-t border-gray-200/50 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+          <p className="text-[12px] text-gray-500 font-medium break-words">
             © {new Date().getFullYear()} PDA BLISS COMPANY LIMITED. All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-            <a href="#" className="text-[12px] text-gray-400 hover:text-green-600 font-bold transition-colors">Privacy Policy</a>
-            <a href="#" className="text-[12px] text-gray-400 hover:text-green-600 font-bold transition-colors">Terms of Service</a>
+            <span className="text-[12px] text-gray-400 font-bold">Privacy Policy</span>
+            <span className="text-[12px] text-gray-400 font-bold">Terms of Service</span>
           </div>
         </div>
       </div>

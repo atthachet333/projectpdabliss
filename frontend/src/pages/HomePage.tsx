@@ -74,20 +74,20 @@ export const HomePage: React.FC = () => {
       `}</style>
 
       {/* 1. Hero Section (ปรับเอฟเฟกต์และลูกเล่นแสง) */}
-      <section className="relative pt-24 pb-40 px-6 border-b border-gray-100 bg-white">
+      <section className="relative pt-16 sm:pt-20 lg:pt-24 pb-24 sm:pb-32 lg:pb-40 px-4 sm:px-6 border-b border-gray-100 bg-white overflow-hidden">
         {/* แสง Glow พื้นหลังวิ่งไปมา */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-green-300/20 rounded-full mix-blend-multiply filter blur-[80px] animate-pulse pointer-events-none"></div>
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-emerald-200/20 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse pointer-events-none delay-700"></div>
+        <div className="absolute top-0 left-1/4 h-72 w-72 sm:h-[500px] sm:w-[500px] bg-green-300/20 rounded-full mix-blend-multiply filter blur-[80px] animate-pulse pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 h-80 w-80 sm:h-[600px] sm:w-[600px] bg-emerald-200/20 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse pointer-events-none delay-700"></div>
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
           
-          <div className="flex flex-col items-start pr-8 z-20">
-            <div className="flex items-center space-x-2 bg-green-50 text-green-700 px-5 py-2.5 rounded-full mb-6 border border-green-200 shadow-sm hover:scale-105 transition-transform cursor-default group">
+          <div className="flex flex-col items-start pr-0 z-20">
+            <div className="flex items-center space-x-2 bg-green-50 text-green-700 px-4 sm:px-5 py-2.5 rounded-full mb-6 border border-green-200 shadow-sm hover:scale-105 transition-transform cursor-default group">
               <Sparkles className="w-5 h-5 group-hover:text-yellow-500 transition-colors" />
-              <span className="text-sm font-bold tracking-wide">พาร์ทเนอร์ที่คุณไว้วางใจ One-Stop Service</span>
+              <span className="text-xs sm:text-sm font-bold tracking-wide">พาร์ทเนอร์ที่คุณไว้วางใจ One-Stop Service</span>
             </div>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-[1.15] tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-[1.15] tracking-tight">
               บริการจัดทำ <br/>
               {/* ข้อความไล่สีวิ่งได้ */}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-800 via-emerald-500 to-green-900 animate-gradient-x">
@@ -95,7 +95,7 @@ export const HomePage: React.FC = () => {
               </span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-gray-800 mb-6 font-bold tracking-tight flex items-center">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-800 mb-6 font-bold tracking-tight flex flex-wrap items-center">
               รวดเร็ว <span className="mx-2 text-green-500">•</span> ถูกต้อง <span className="mx-2 text-green-500">•</span> เชื่อถือได้
             </p>
             <p className="text-base md:text-lg text-gray-500 mb-10 max-w-lg leading-relaxed font-medium">
@@ -103,25 +103,25 @@ export const HomePage: React.FC = () => {
               ประหยัดเวลา ลดความกังวล ให้เราดูแลทุกขั้นตอนแทนคุณ
             </p>
             
-            <div className="flex flex-wrap gap-4 items-center">
+            <div className="flex w-full flex-col sm:w-auto sm:flex-row sm:flex-wrap gap-4 items-stretch sm:items-center">
               <Link
                 to="/contact"
                 onClick={() => logUserAction('CLICK_CONSULT_BUTTON', { location: 'HomePage_Hero' })}
-                className="bg-gradient-to-r from-green-700 to-green-600 text-white font-bold py-4 px-10 text-lg rounded-2xl shadow-[0_10px_30px_rgba(22,163,74,0.3)] hover:shadow-[0_15px_40px_rgba(22,163,74,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center group relative overflow-hidden"
+                className="min-h-11 justify-center bg-gradient-to-r from-green-700 to-green-600 text-white font-bold py-4 px-6 sm:px-10 text-base sm:text-lg rounded-2xl shadow-[0_10px_30px_rgba(22,163,74,0.3)] hover:shadow-[0_15px_40px_rgba(22,163,74,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center group relative overflow-hidden"
               >
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                 <span className="relative z-10 flex items-center">สอบถามบริการ <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1.5 transition-transform" /></span>
               </Link>
-              <Link to="/services" data-analytics-id="hero_view_all_services" onClick={() => logUserAction('NAV_VIEW_SERVICES', { path: '/services' })} className="bg-white text-gray-700 border-2 border-gray-200 font-bold py-4 px-10 text-lg rounded-2xl shadow-sm hover:border-green-500 hover:text-green-700 hover:bg-green-50 transition-all duration-300 flex items-center group">
+              <Link to="/services" data-analytics-id="hero_view_all_services" onClick={() => logUserAction('NAV_VIEW_SERVICES', { path: '/services' })} className="min-h-11 justify-center bg-white text-gray-700 border-2 border-gray-200 font-bold py-4 px-6 sm:px-10 text-base sm:text-lg rounded-2xl shadow-sm hover:border-green-500 hover:text-green-700 hover:bg-green-50 transition-all duration-300 flex items-center group">
                 ดูบริการทั้งหมด <ChevronRight className="ml-1 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
             {/* เพิ่ม Trust Badge */}
-            <div className="mt-10 flex items-center gap-4 text-sm font-bold text-gray-500">
+            <div className="mt-10 flex flex-wrap items-center gap-4 text-sm font-bold text-gray-500">
               <div className="flex -space-x-2">
                 {[1,2,3,4].map(i => (
-                  <img key={i} src={`https://i.pravatar.cc/100?img=${i+10}`} alt="user" className="w-8 h-8 rounded-full border-2 border-white shadow-sm" />
+                  <img key={i} src={`https://i.pravatar.cc/100?img=${i+10}`} alt="user" loading="lazy" className="w-8 h-8 rounded-full border-2 border-white shadow-sm" />
                 ))}
               </div>
               <p>บริษัทชั้นนำกว่า <span className="text-green-700 font-black">1,000+</span> แห่งเลือกใช้</p>
@@ -129,7 +129,7 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* รูปภาพพร้อมเอฟเฟกต์ลอยตัว */}
-          <div className="relative w-full h-[450px] md:h-[550px] z-10 flex justify-center items-center">
+          <div className="relative w-full h-[300px] sm:h-[380px] md:h-[550px] z-10 flex justify-center items-center">
             {/* กล่องตกแต่งด้านหลัง */}
             <div className="absolute inset-0 bg-gradient-to-tr from-green-100 to-emerald-50 rounded-[3rem] rotate-3 scale-95 animate-float-delayed -z-10"></div>
             
@@ -144,7 +144,7 @@ export const HomePage: React.FC = () => {
             </div>
 
             {/* Badge ลอยๆ ซ้อนรูปภาพ */}
-            <div className="absolute -bottom-6 -left-6 bg-white p-5 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-4 animate-float-delayed z-20">
+            <div className="absolute bottom-3 left-3 sm:-bottom-6 sm:-left-6 bg-white p-4 sm:p-5 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-3 sm:gap-4 animate-float-delayed z-20">
               <div className="bg-green-100 p-3 rounded-full text-green-600"><Star className="w-6 h-6 fill-current" /></div>
               <div>
                 <p className="text-xs text-gray-500 font-bold mb-0.5">ความพึงพอใจ</p>
@@ -156,7 +156,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 2. Stats Bar (เด้งทะลุกรอบขึ้นมา) */}
-      <section className="max-w-7xl mx-auto px-6 relative z-30 -mt-14">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 relative z-30 -mt-10 sm:-mt-14">
         <div className="bg-white rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-4 flex flex-col md:flex-row justify-between divide-y md:divide-y-0 md:divide-x divide-gray-100 border border-gray-100">
           {[
             { icon: <Zap />, title: 'รวดเร็ว', desc: 'ดำเนินการไวตรงกำหนด' },
@@ -164,7 +164,7 @@ export const HomePage: React.FC = () => {
             { icon: <Users />, title: 'ดูแลครบ', desc: 'จบทุกขั้นตอนที่เดียว' },
             { icon: <ShieldCheck />, title: 'เชี่ยวชาญ', desc: 'ทีมงานมืออาชีพ' },
           ].map((stat, idx) => (
-            <div key={idx} className="flex items-center gap-4 px-6 py-5 flex-1 hover:-translate-y-2 transition-transform duration-300 cursor-default group bg-white hover:bg-green-50/50 rounded-2xl">
+            <div key={idx} className="flex items-center gap-4 px-4 sm:px-6 py-5 flex-1 hover:-translate-y-2 transition-transform duration-300 cursor-default group bg-white hover:bg-green-50/50 rounded-2xl">
               <div className="flex-shrink-0 bg-green-50 p-3.5 rounded-2xl text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors duration-300 shadow-sm group-hover:shadow-green-200 group-hover:scale-110">
                 {React.cloneElement(stat.icon as React.ReactElement<{ className?: string }>, { className: "w-6 h-6" })}
               </div>
@@ -178,15 +178,15 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 3. Main Content Grid (บริการ & ขั้นตอน) */}
-      <section className="max-w-7xl mx-auto px-6 py-24">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 lg:py-24">
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-12">
           
           {/* ซ้าย: บริการของเรา */}
-          <div className="xl:col-span-5 bg-white p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative overflow-hidden group/section">
+          <div className="xl:col-span-5 bg-white p-5 sm:p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative overflow-hidden group/section">
             {/* วงกลมตกแต่ง */}
             <div className="absolute -top-24 -right-24 w-48 h-48 bg-green-50 rounded-full blur-2xl group-hover/section:bg-green-100 transition-colors duration-700"></div>
 
-            <h2 className="text-3xl font-black text-gray-900 mb-10 flex items-center relative z-10">
+            <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-8 sm:mb-10 flex items-center relative z-10">
               <div className="w-2 h-8 bg-gradient-to-b from-green-400 to-green-700 rounded-full mr-4 shadow-sm"></div>
               บริการของเรา
             </h2>
@@ -228,13 +228,13 @@ export const HomePage: React.FC = () => {
           <div className="xl:col-span-7 space-y-10">
             
             {/* ทำไมต้องเลือกเรา */}
-            <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
-              <h2 className="text-3xl font-black text-gray-900 mb-10 flex items-center">
+            <div className="bg-white p-5 sm:p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-8 sm:mb-10 flex items-center">
                 <div className="w-2 h-8 bg-gradient-to-b from-green-400 to-green-700 rounded-full mr-4 shadow-sm"></div>
                 ทำไมต้องเลือก PDA BLISS
               </h2>
               
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6">
                 {[
                   { title: 'แนะนำชัดเจน', desc: 'อธิบายครบ\nเข้าใจง่าย', icon: <MessageSquare /> },
                   { title: 'ติดตามใกล้ชิด', desc: 'อัปเดตงาน\nตลอดเวลา', icon: <Search /> },
@@ -254,8 +254,8 @@ export const HomePage: React.FC = () => {
             </div>
 
             {/* ขั้นตอนการให้บริการ (เส้นวิ่งเทพๆ) */}
-            <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 group/process" onMouseLeave={() => setHoveredStep(null)}>
-              <h2 className="text-3xl font-black text-gray-900 mb-14 flex items-center">
+            <div className="bg-white p-5 sm:p-8 md:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 group/process" onMouseLeave={() => setHoveredStep(null)}>
+              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-10 sm:mb-14 flex items-center">
                 <div className="w-2 h-8 bg-gradient-to-b from-green-400 to-green-700 rounded-full mr-4 shadow-sm"></div>
                 ขั้นตอนการให้บริการ
               </h2>
@@ -311,19 +311,19 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 4. Banner เรียกน้ำย่อยก่อน FAQ */}
-      <section className="max-w-7xl mx-auto px-6 mb-12">
-         <div className="bg-gradient-to-r from-green-900 to-green-700 rounded-[2rem] p-10 md:p-14 text-center relative overflow-hidden shadow-2xl">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-12">
+         <div className="bg-gradient-to-r from-green-900 to-green-700 rounded-[2rem] p-6 sm:p-10 md:p-14 text-center relative overflow-hidden shadow-2xl">
             {/* วงกลมตกแต่ง */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-green-400/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
             
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-4 relative z-10">พร้อมให้เราดูแลเอกสารของคุณแล้วหรือยัง?</h2>
-            <p className="text-green-100 text-lg mb-8 relative z-10 max-w-2xl mx-auto">ติดต่อทีมงานผู้เชี่ยวชาญของเราวันนี้ ปรึกษาฟรี ไม่มีค่าใช้จ่ายเบื้องต้น</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-4 relative z-10">พร้อมให้เราดูแลเอกสารของคุณแล้วหรือยัง?</h2>
+            <p className="text-green-100 text-base sm:text-lg mb-8 relative z-10 max-w-2xl mx-auto">ติดต่อทีมงานผู้เชี่ยวชาญของเราวันนี้ ปรึกษาฟรี ไม่มีค่าใช้จ่ายเบื้องต้น</p>
             <Link
               to="/contact"
               data-analytics-id="home_banner_contact_consultation"
               onClick={() => logUserAction('CLICK_CONSULT_BUTTON', { location: 'HomePage_Banner' })}
-              className="relative z-10 bg-white text-green-800 font-bold py-4 px-10 rounded-full shadow-[0_10px_20px_rgba(0,0,0,0.2)] hover:scale-105 hover:shadow-[0_15px_30px_rgba(0,0,0,0.3)] transition-all duration-300 flex items-center mx-auto group"
+              className="relative z-10 bg-white text-green-800 font-bold py-4 px-6 sm:px-10 rounded-full shadow-[0_10px_20px_rgba(0,0,0,0.2)] hover:scale-105 hover:shadow-[0_15px_30px_rgba(0,0,0,0.3)] transition-all duration-300 flex min-h-11 items-center justify-center mx-auto group"
             >
               ติดต่อรับคำปรึกษา <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
             </Link>
@@ -331,11 +331,11 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 5. FAQ Section (สมูทขึ้น สวยขึ้น) */}
-      <section className="max-w-7xl mx-auto px-6 mb-16">
-        <div className="bg-white p-8 md:p-12 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 flex flex-col lg:flex-row gap-12">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-16">
+        <div className="bg-white p-5 sm:p-8 md:p-12 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 flex flex-col lg:flex-row gap-8 lg:gap-12">
           
           <div className="lg:w-1/3 flex flex-col">
-            <h2 className="text-3xl font-black text-gray-900 mb-6 flex items-center">
+            <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-6 flex items-center">
               <div className="w-2 h-8 bg-gradient-to-b from-green-400 to-green-700 rounded-full mr-4 shadow-sm"></div>
               คำถามที่พบบ่อย
             </h2>
@@ -357,7 +357,7 @@ export const HomePage: React.FC = () => {
               >
                 <button 
                   onClick={() => toggleFaq(idx)}
-                  className="w-full text-left px-8 py-5 flex items-center justify-between transition-colors focus:outline-none"
+                  className="w-full text-left px-4 sm:px-8 py-5 flex items-start justify-between gap-3 transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-green-200"
                 >
                   <span className={`font-bold text-[15px] flex items-center gap-4 ${openFaq === idx ? 'text-green-800' : 'text-gray-900'}`}>
                     <span className={`flex items-center justify-center w-7 h-7 rounded-full text-xs transition-colors ${openFaq === idx ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-500'}`}>Q</span>
@@ -371,7 +371,7 @@ export const HomePage: React.FC = () => {
                     openFaq === idx ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
                   }`}
                 >
-                  <div className="px-8 pb-6 pt-2 text-[14px] text-gray-600 font-medium leading-relaxed flex gap-4">
+                  <div className="px-4 sm:px-8 pb-6 pt-2 text-[14px] text-gray-600 font-medium leading-relaxed flex gap-4">
                     <span className="font-bold text-green-600 pt-0.5 mt-0.5">A</span>
                     {faq.a}
                   </div>

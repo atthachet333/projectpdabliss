@@ -67,7 +67,7 @@ export const ContactPage: React.FC = () => {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-[#F8FAFC] font-sans pb-24 relative overflow-hidden">
+    <div className="w-full min-h-screen bg-[#F8FAFC] font-sans pb-20 sm:pb-24 relative overflow-hidden">
       
       {/* --- ฝัง Custom CSS สำหรับลูกเล่นแอนิเมชันให้เว็บมีชีวิต --- */}
       <style>{`
@@ -106,13 +106,13 @@ export const ContactPage: React.FC = () => {
       `}</style>
 
       {/* แสง Glow เคลื่อนไหวจางๆ ที่พื้นหลัง */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-green-300/10 rounded-full filter blur-[120px] animate-blob pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-200/10 rounded-full filter blur-[100px] animate-blob pointer-events-none" style={{ animationDelay: '4s' }}></div>
+      <div className="absolute top-0 right-0 h-80 w-80 sm:h-[600px] sm:w-[600px] bg-green-300/10 rounded-full filter blur-[120px] animate-blob pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 h-72 w-72 sm:h-[500px] sm:w-[500px] bg-emerald-200/10 rounded-full filter blur-[100px] animate-blob pointer-events-none" style={{ animationDelay: '4s' }}></div>
 
       {/* 1. Hero Title Header */}
-      <section className="relative bg-white pt-24 pb-20 px-6 border-b border-gray-100 shadow-sm z-10">
+      <section className="relative bg-white pt-16 sm:pt-20 lg:pt-24 pb-16 sm:pb-20 px-4 sm:px-6 border-b border-gray-100 shadow-sm z-10">
         <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-50 border border-green-100 text-green-800 text-sm font-bold mb-6 shadow-sm cursor-default">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-50 border border-green-100 text-green-800 text-xs sm:text-sm font-bold mb-6 shadow-sm cursor-default">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -120,7 +120,7 @@ export const ContactPage: React.FC = () => {
             <span>เจ้าหน้าที่พร้อมให้บริการ | ตอบกลับรวดเร็วทันใจภายในเวลาทำการ</span>
           </div>
           
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 tracking-tight leading-tight">
             ติดต่อเราเพื่อรับ <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-700 to-green-500">คำปรึกษาฟรี</span>
           </h1>
           <p className="text-gray-600 max-w-2xl text-base md:text-lg font-medium leading-relaxed">
@@ -131,21 +131,21 @@ export const ContactPage: React.FC = () => {
       </section>
 
       {/* 2. Main 2-Column Content Layout */}
-      <section className="max-w-7xl mx-auto px-6 relative z-20 -mt-10">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 relative z-20 -mt-8 sm:-mt-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
           {/* ================= ฝั่งซ้าย (ฟอร์ม + Trust Section จัดเต็มเพื่อไม่ให้ว่าง) กว้าง 5 ส่วน ================= */}
           <div className="lg:col-span-5 flex flex-col gap-6">
             
             {/* 📝 ฟอร์มติดต่อ */}
-            <div className="bg-white p-7 md:p-9 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100 relative overflow-hidden group hover:border-green-200 transition-colors duration-500">
+            <div className="bg-white p-5 sm:p-7 md:p-9 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100 relative overflow-hidden group hover:border-green-200 transition-colors duration-500">
               <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-green-400 to-green-700"></div>
               
               <h3 className="text-2xl font-black text-gray-900 mb-2">ฝากข้อความถึงเรา</h3>
               <p className="text-[12px] text-gray-500 mb-7 font-medium">กรอกข้อมูลเพื่อให้เจ้าหน้าที่ติดต่อกลับอย่างรวดเร็ว</p>
               
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                      <label className="block text-[11px] font-bold text-gray-700 mb-1.5 ml-1">ชื่อ-นามสกุล <span className="text-red-500">*</span></label>
                      <input type="text" name="name" placeholder="คุณสมชาย..." required value={formData.name} onChange={handleInputChange} className="w-full text-sm border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none transition-all hover:bg-white" />
@@ -172,12 +172,12 @@ export const ContactPage: React.FC = () => {
                   <textarea name="message" placeholder="ระบุความต้องการของคุณเพิ่มเติม..." rows={3} required value={formData.message} onChange={handleInputChange} className="w-full text-sm border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none resize-none transition-all hover:bg-white"></textarea>
                 </div>
                 
-                <label className="flex items-start gap-2.5 cursor-pointer p-3 bg-green-50/60 rounded-xl border border-green-100 hover:bg-green-50 transition-colors">
-                  <input type="checkbox" name="consent" checked={formData.consent} onChange={handleInputChange} className="mt-0.5 w-3.5 h-3.5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2 cursor-pointer" />
+                <label className="flex items-start gap-3 cursor-pointer p-3 bg-green-50/60 rounded-xl border border-green-100 hover:bg-green-50 transition-colors">
+                  <input type="checkbox" name="consent" checked={formData.consent} onChange={handleInputChange} className="mt-0.5 h-5 w-5 shrink-0 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2 cursor-pointer" />
                   <span className="text-[11px] text-gray-600 font-medium leading-relaxed">ฉันยินยอมให้เก็บข้อมูลเพื่อติดต่อกลับและนำเสนอสิทธิประโยชน์ ตามนโยบายการรักษาข้อมูล <span className="text-green-700 font-bold">(PDPA)</span></span>
                 </label>
                 
-                <button type="submit" disabled={isSubmitting} data-analytics-id="contact_page_form_submit" className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-4 rounded-xl transition-all duration-300 flex items-center justify-center text-[15px] shadow-[0_5px_15px_rgba(22,163,74,0.25)] hover:shadow-[0_10px_25px_rgba(22,163,74,0.35)] hover:-translate-y-0.5 active:scale-95 group mt-2 animate-shimmer">
+                <button type="submit" disabled={isSubmitting} data-analytics-id="contact_page_form_submit" className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-4 rounded-xl transition-all duration-300 flex min-h-14 items-center justify-center text-[15px] shadow-[0_5px_15px_rgba(22,163,74,0.25)] hover:shadow-[0_10px_25px_rgba(22,163,74,0.35)] hover:-translate-y-0.5 active:scale-95 group mt-2 animate-shimmer">
                   {isSubmitting ? 'กำลังส่ง...' : 'ส่งข้อมูล'} <Send className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </button>
                 {submitMessage && <p className="text-[12px] text-gray-500 font-medium">{submitMessage}</p>}
@@ -185,7 +185,7 @@ export const ContactPage: React.FC = () => {
             </div>
 
             {/* 🛡️ Trust & Credibility Section (กล่องการันตีและ Social Proof) */}
-            <div className="bg-white p-7 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100 relative overflow-hidden group/trust">
+            <div className="bg-white p-5 sm:p-7 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100 relative overflow-hidden group/trust">
                <div className="absolute -right-8 -top-8 text-green-50 opacity-60 group-hover/trust:scale-110 group-hover/trust:rotate-12 transition-transform duration-700 pointer-events-none">
                   <ShieldCheck className="w-40 h-40" />
                </div>
@@ -216,14 +216,14 @@ export const ContactPage: React.FC = () => {
                </div>
 
                {/* แถบ Social Proof */}
-               <div className="mt-5 pt-5 border-t border-gray-100 flex items-center justify-between relative z-10">
+               <div className="mt-5 pt-5 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10">
                   <div className="flex -space-x-2">
                      {[1,2,3,4].map(i => (
-                        <img key={i} src={`https://i.pravatar.cc/100?img=${i+20}`} alt="user" className="w-8 h-8 rounded-full border-2 border-white shadow-sm" />
+                        <img key={i} src={`https://i.pravatar.cc/100?img=${i+20}`} alt="user" loading="lazy" className="w-8 h-8 rounded-full border-2 border-white shadow-sm" />
                      ))}
                      <div className="w-8 h-8 rounded-full border-2 border-white bg-green-100 flex items-center justify-center text-[10px] font-black text-green-700 z-10">+2k</div>
                   </div>
-                  <div className="text-right">
+                  <div className="text-left sm:text-right">
                      <p className="text-[12px] font-black text-gray-800">ลูกค้าองค์กรไว้วางใจ</p>
                      <p className="text-[10px] text-gray-500 font-medium">บอกต่อและใช้บริการซ้ำกว่า 98%</p>
                   </div>
@@ -231,7 +231,7 @@ export const ContactPage: React.FC = () => {
             </div>
 
             {/* ✨ เพิ่มใหม่: กล่อง "หลังจากส่งข้อความ จะเกิดอะไรขึ้น?" (ลดช่องว่างฝั่งซ้ายได้สมบูรณ์แบบ) */}
-            <div className="bg-gradient-to-br from-gray-900 to-green-950 p-7 rounded-[2rem] shadow-xl border border-gray-800 relative overflow-hidden group/steps">
+            <div className="bg-gradient-to-br from-gray-900 to-green-950 p-5 sm:p-7 rounded-[2rem] shadow-xl border border-gray-800 relative overflow-hidden group/steps">
                <div className="absolute right-0 top-0 opacity-5 pointer-events-none group-hover/steps:scale-110 group-hover/steps:rotate-12 transition-transform duration-700">
                   <Clock className="w-48 h-48 text-white" />
                </div>
@@ -260,7 +260,7 @@ export const ContactPage: React.FC = () => {
             </div>
 
             {/* ✨ เพิ่มใหม่: กล่อง "เสียงจากลูกค้า" (Review Box) */}
-            <div className="bg-white p-6 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100 hover:border-green-200 transition-colors duration-500">
+            <div className="bg-white p-5 sm:p-6 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100 hover:border-green-200 transition-colors duration-500">
                <div className="flex items-center gap-1 mb-3 text-yellow-400">
                   <Star className="w-4 h-4 fill-current" /><Star className="w-4 h-4 fill-current" /><Star className="w-4 h-4 fill-current" /><Star className="w-4 h-4 fill-current" /><Star className="w-4 h-4 fill-current" />
                </div>
@@ -280,13 +280,13 @@ export const ContactPage: React.FC = () => {
           <div className="lg:col-span-7 flex flex-col gap-6">
             
             {/* 📍 แผนที่สำนักงานใหญ่ */}
-            <div className="bg-white p-6 md:p-8 rounded-[2rem] shadow-[0_10px_35px_rgba(0,0,0,0.03)] border border-gray-100 group/map flex flex-col hover:border-green-200 hover:shadow-[0_15px_40px_rgba(34,197,94,0.06)] transition-all duration-500">
+            <div className="bg-white p-5 sm:p-6 md:p-8 rounded-[2rem] shadow-[0_10px_35px_rgba(0,0,0,0.03)] border border-gray-100 group/map flex flex-col hover:border-green-200 hover:shadow-[0_15px_40px_rgba(34,197,94,0.06)] transition-all duration-500">
                <h3 className="text-xl font-black text-gray-900 mb-4 flex items-center gap-2.5">
                   <MapPin className="w-6 h-6 text-green-600" /> แผนที่ตั้งสำนักงานใหญ่
                </h3>
                
                <div className="w-full h-56 md:h-64 bg-gray-100 rounded-2xl mb-5 flex items-center justify-center border border-gray-200 relative overflow-hidden cursor-pointer">
-                  <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80" alt="Map Location" className="w-full h-full object-cover opacity-70 group-hover/map:scale-105 transition-transform duration-700" />
+                  <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80" alt="Map Location" loading="lazy" className="w-full h-full object-cover opacity-70 group-hover/map:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-green-900/5 group-hover/map:bg-transparent transition-colors duration-500"></div>
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
                      <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white shadow-xl relative z-10 animate-bounce">
@@ -302,33 +302,34 @@ export const ContactPage: React.FC = () => {
                   </p>
                </div>
                
-               <a href="#" className="w-full bg-white border-2 border-gray-200 text-gray-700 font-bold py-3.5 rounded-xl transition-all hover:border-green-600 hover:text-green-700 flex items-center justify-center text-xs group/btn shadow-sm">
+               <span className="w-full bg-white border-2 border-gray-200 text-gray-700 font-bold py-3.5 rounded-xl flex min-h-11 items-center justify-center text-xs shadow-sm">
                   เปิดนำทางด้วย Google Maps <ArrowRight className="w-4 h-4 ml-1.5 group-hover/btn:translate-x-1 transition-transform" />
-               </a>
+               </span>
             </div>
 
             {/* 📸 กล่องใส่รูปภาพประกอบ (ดุ๊กดิ๊ก) */}
-            <div className="relative w-full h-[20rem] bg-gray-100 rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-200 group">
+            <div className="relative w-full h-72 sm:h-[20rem] bg-gray-100 rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-200 group">
               <img 
                 src="/images/contact.png" 
                 alt="ทีมงานบริการลูกค้า" 
+                loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 animate-wiggle" 
               />
               <div className="absolute inset-0 bg-gradient-to-t from-green-950/80 via-green-950/20 to-transparent"></div>
-              <div className="absolute bottom-6 left-6 right-6 flex items-center gap-4">
+              <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 flex items-start sm:items-center gap-3 sm:gap-4">
                  <div className="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/20 text-white">
                     <ImageIcon className="w-6 h-6" />
                  </div>
                  <div>
-                    <h4 className="text-white font-black text-lg drop-shadow-md">ทีมงานผู้เชี่ยวชาญพร้อมดูแล</h4>
+                    <h4 className="text-white font-black text-base sm:text-lg drop-shadow-md">ทีมงานผู้เชี่ยวชาญพร้อมดูแล</h4>
                     <p className="text-green-200 text-[13px] font-medium drop-shadow-sm">ดูแลสิทธิประโยชน์และเอกสารของคุณอย่างถูกต้องตามกฎหมาย</p>
                  </div>
               </div>
             </div>
 
             {/* ช่องทางติดต่อด่วนและเวลาทำการ */}
-            <div className="bg-white p-6 rounded-[2rem] shadow-[0_4px_25px_rgba(0,0,0,0.02)] border border-gray-100 space-y-3.5">
-               <div className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-green-50/50 border border-transparent hover:border-green-100/50 transition-all duration-300 group cursor-default">
+            <div className="bg-white p-5 sm:p-6 rounded-[2rem] shadow-[0_4px_25px_rgba(0,0,0,0.02)] border border-gray-100 space-y-3.5">
+               <div className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-green-50/50 border border-transparent hover:border-green-100/50 transition-all duration-300 group cursor-default break-words">
                   <div className="p-3 bg-green-600 text-white rounded-xl shadow-md group-hover:scale-105 transition-transform"><Phone className="w-5 h-5" /></div>
                   <div>
                      <h4 className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">สายด่วนโทรศัพท์</h4>
@@ -336,7 +337,7 @@ export const ContactPage: React.FC = () => {
                   </div>
                </div>
                
-               <div className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-green-50/50 border border-transparent hover:border-green-100/50 transition-all duration-300 group cursor-default">
+               <div className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-green-50/50 border border-transparent hover:border-green-100/50 transition-all duration-300 group cursor-default break-words">
                   <div className="p-3 bg-[#06C755] text-white rounded-xl shadow-md group-hover:scale-105 transition-transform"><MessageCircle className="w-5 h-5 fill-current" /></div>
                   <div>
                      <h4 className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">LINE Official</h4>
@@ -344,7 +345,7 @@ export const ContactPage: React.FC = () => {
                   </div>
                </div>
 
-               <div className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-green-50/50 border border-transparent hover:border-green-100/50 transition-all duration-300 group cursor-default">
+               <div className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-green-50/50 border border-transparent hover:border-green-100/50 transition-all duration-300 group cursor-default break-words">
                   <div className="p-3 bg-green-50 text-green-600 rounded-xl shadow-sm group-hover:bg-green-600 group-hover:text-white transition-colors"><Clock className="w-5 h-5" /></div>
                   <div>
                      <h4 className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">เวลาทำการสำนักงาน</h4>
