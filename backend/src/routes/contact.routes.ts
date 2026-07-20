@@ -1,6 +1,7 @@
 import { Router, type Request, type Response } from 'express';
 import { Resend } from 'resend';
 import { db } from '../db';
+import { logger, maskEmail, maskPhone } from '../lib/logger';
 import type { ApiResponse, ContactRequestBody } from '../types/contact';
 
 const router = Router();
@@ -71,10 +72,10 @@ const mailBody = (data: CleanContact): string => {
 const missingEmailKeys = (): string[] => emailKeys.filter(key => !process.env[key]?.trim());
 
 const logEmailStatus = (missing: string[]): void => {
-  for (const key of emailKeys) {
-    console.warn(`${key} configured: ${!missing.includes(key)}`);
-  }
-  console.warn(`Missing email config: ${missing.join(', ')}`);
+  logger.warn('contact', 'email_configuration_missing', 'Contact email configuration is incomplete', {
+    configuredKeys: emailKeys.filter(key => !missing.includes(key)),
+    missingKeys: missing,
+  });
 };
 
 const providerErrorInfo = (error: unknown): Record<string, unknown> => {
@@ -140,19 +141,42 @@ const leadValues = (data: CleanContact): [string, string, string | null, string 
 ];
 
 router.post('/', async (req: Request<Record<string, never>, ApiResponse<never>, ContactRequestBody>, res: Response<ApiResponse<never>>): Promise<void> => {
+  const startedAt = Date.now();
+  logger.info('contact', 'submit_started', 'Contact form submission started', {
+    requestId: req.requestId,
+    sourcePage: typeof req.body?.pageUrl === 'string' ? req.body.pageUrl.slice(0, 300) : undefined,
+  });
   const result = validate(req.body);
   if (result.bot) {
+    logger.warn('contact', 'honeypot_triggered', 'Contact form honeypot was triggered', { requestId: req.requestId });
     res.json({ success: true, message: 'ส่งข้อความเรียบร้อยแล้ว' });
     return;
   }
   if (result.errors || !result.data) {
+    logger.warn('contact', 'validation_failed', 'Contact form validation failed', {
+      requestId: req.requestId,
+      errorCount: result.errors?.length ?? 0,
+      fieldKeys: Object.keys(req.body ?? {}).filter(key => key !== 'website'),
+    });
     res.status(400).json({ success: false, message: failMessage, errors: result.errors });
     return;
   }
 
   const values = leadValues(result.data);
+  logger.info('contact', 'lead_validated', 'Contact lead passed validation', {
+    requestId: req.requestId,
+    email: maskEmail(result.data.email),
+    phone: maskPhone(result.data.phone),
+    hasMessage: Boolean(result.data.message),
+    sourcePage: result.data.pageUrl,
+  });
   const recentLead = findRecentLead.get(...values) as { id: number; email_delivery_status: string } | undefined;
   if (recentLead) {
+    logger.info('contact', 'duplicate_recent_lead', 'Recent duplicate contact lead detected', {
+      requestId: req.requestId,
+      leadId: recentLead.id,
+      emailDeliveryStatus: recentLead.email_delivery_status,
+    });
     if (recentLead.email_delivery_status === 'FAILED') {
       res.status(502).json({ success: false, message: failMessage });
       return;
@@ -162,10 +186,20 @@ router.post('/', async (req: Request<Record<string, never>, ApiResponse<never>, 
   }
 
   const leadId = Number(insertLead.run(...values).lastInsertRowid);
+  logger.info('contact', 'lead_saved', 'Contact lead saved', {
+    requestId: req.requestId,
+    leadId,
+    emailDeliveryStatus: 'PENDING',
+  });
   const missing = missingEmailKeys();
   if (missing.length) {
     logEmailStatus(missing);
     updateLeadDelivery.run('FAILED', null, leadId);
+    logger.warn('contact', 'submit_failed', 'Contact form submission failed because email provider is not configured', {
+      requestId: req.requestId,
+      leadId,
+      durationMs: Date.now() - startedAt,
+    });
     res.status(503).json({ success: false, message: failMessage, errors: missing.map(key => `Missing environment variable: ${key}`) });
     return;
   }
@@ -173,6 +207,11 @@ router.post('/', async (req: Request<Record<string, never>, ApiResponse<never>, 
   const { RESEND_API_KEY, CONTACT_FROM_EMAIL, CONTACT_RECEIVER_EMAIL } = process.env as Record<(typeof emailKeys)[number], string>;
 
   try {
+    logger.info('email', 'send_started', 'Contact notification email send started', {
+      requestId: req.requestId,
+      leadId,
+      provider: 'resend',
+    });
     const resend = new Resend(RESEND_API_KEY);
     const { data, error } = await resend.emails.send({
       from: CONTACT_FROM_EMAIL,
@@ -184,12 +223,24 @@ router.post('/', async (req: Request<Record<string, never>, ApiResponse<never>, 
 
     if (error) throw error;
     updateLeadDelivery.run('SENT', data?.id ?? null, leadId);
-    console.log(`Resend email id returned: ${Boolean(data?.id)}`);
+    logger.info('email', 'send_succeeded', 'Contact notification email sent', {
+      requestId: req.requestId,
+      leadId,
+      provider: 'resend',
+      providerIdReturned: Boolean(data?.id),
+      durationMs: Date.now() - startedAt,
+    });
 
     res.json({ success: true, message: 'ส่งข้อความเรียบร้อยแล้ว' });
   } catch (error) {
     updateLeadDelivery.run('FAILED', null, leadId);
-    console.error('Contact email failed', providerErrorInfo(error));
+    logger.error('email', 'send_failed', 'Contact notification email failed', {
+      requestId: req.requestId,
+      leadId,
+      provider: 'resend',
+      providerError: providerErrorInfo(error),
+      durationMs: Date.now() - startedAt,
+    });
     res.status(providerStatus(error)).json({ success: false, message: failMessage });
   }
 });

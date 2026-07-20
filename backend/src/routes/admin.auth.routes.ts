@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import { Router, type Request, type Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import { db } from '../db';
+import { logger, maskEmail } from '../lib/logger';
 import {
   clearSessionCookie,
   hashIp,
@@ -33,6 +34,13 @@ const loginLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: { success: false, message: 'พยายามเข้าสู่ระบบบ่อยเกินไป กรุณาลองใหม่ภายหลัง' },
+  handler: (req, res) => {
+    logger.warn('admin_auth', 'login_rate_limited', 'Admin login rate limit reached', {
+      requestId: req.requestId,
+      path: req.originalUrl,
+    });
+    res.status(429).json({ success: false, message: 'พยายามเข้าสู่ระบบบ่อยเกินไป กรุณาลองใหม่ภายหลัง' });
+  },
 });
 
 const findAdminByEmail = db.prepare('SELECT id, email, password_hash, role, is_active, must_change_password FROM admin_users WHERE email = ?');
@@ -50,13 +58,27 @@ router.post('/login', loginLimiter, async (req: Request, res: Response<ApiRespon
   const body = (req.body ?? {}) as { email?: unknown; password?: unknown };
   const email = normalizeEmail(text(body.email));
   const password = typeof body.password === 'string' ? body.password : '';
+  logger.info('admin_auth', 'login_attempt', 'Admin login attempt started', {
+    requestId: req.requestId,
+    email: maskEmail(email),
+  });
   if (!email || !password) {
+    logger.warn('admin_auth', 'login_failed', 'Admin login failed', {
+      requestId: req.requestId,
+      email: maskEmail(email),
+      reason: 'missing_credentials',
+    });
     res.status(401).json({ success: false, message: loginMessage });
     return;
   }
 
   const admin = findAdminByEmail.get(email) as AdminUserRow | undefined;
   if (!admin || !admin.is_active || !(await bcrypt.compare(password, admin.password_hash))) {
+    logger.warn('admin_auth', 'login_failed', 'Admin login failed', {
+      requestId: req.requestId,
+      email: maskEmail(email),
+      reason: !admin ? 'invalid_credentials' : !admin.is_active ? 'inactive_admin' : 'invalid_credentials',
+    });
     res.status(401).json({ success: false, message: loginMessage });
     return;
   }
@@ -66,6 +88,12 @@ router.post('/login', loginLimiter, async (req: Request, res: Response<ApiRespon
   insertSession.run(admin.id, hashSessionToken(token), `+${maxAgeHours} hours`, req.get('user-agent')?.slice(0, 300) ?? null, hashIp(req.ip));
   updateLastLogin.run(admin.id);
   setSessionCookie(res, token);
+  logger.info('admin_auth', 'login_succeeded', 'Admin login succeeded', {
+    requestId: req.requestId,
+    adminId: admin.id,
+    role: admin.role,
+    mustChangePassword: Boolean(admin.must_change_password),
+  });
 
   res.json({
     success: true,
@@ -75,12 +103,22 @@ router.post('/login', loginLimiter, async (req: Request, res: Response<ApiRespon
 });
 
 router.get('/me', requireAdmin, (req: AdminRequest, res: Response<ApiResponse<{ admin: NonNullable<AdminRequest['admin']> }>>): void => {
+  logger.debug('admin_auth', 'session_checked', 'Admin session checked', {
+    requestId: req.requestId,
+    adminId: req.admin?.id,
+    role: req.admin?.role,
+  });
   res.header('Cache-Control', 'no-store').json({ success: true, message: 'เข้าสู่ระบบอยู่', data: { admin: req.admin! } });
 });
 
 router.post('/logout', requireAdmin, (req: AdminRequest, res: Response<ApiResponse<never>>): void => {
   if (req.adminSessionTokenHash) deleteSession.run(req.adminSessionTokenHash);
   clearSessionCookie(res);
+  logger.info('admin_auth', 'logout_succeeded', 'Admin logout succeeded', {
+    requestId: req.requestId,
+    adminId: req.admin?.id,
+    role: req.admin?.role,
+  });
   res.header('Cache-Control', 'no-store').json({ success: true, message: 'ออกจากระบบสำเร็จ' });
 });
 

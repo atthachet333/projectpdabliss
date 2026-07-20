@@ -6,6 +6,7 @@ import {
 import { logUserAction } from '../utils/logger';
 import { trackEvent, trackFormEvent } from '../utils/analytics';
 import { API_BASE_URL } from '../config/api';
+import { appLogger } from '../utils/appLogger';
 
 const contactApiUrl = `${API_BASE_URL}/api/contact`;
 
@@ -41,7 +42,7 @@ export const Footer: React.FC = () => {
       setFormData({ name: '', phone: '', message: '' });
     } catch (err) {
       trackFormEvent('contact_form_error', 'footer_urgent_contact', 'error');
-      console.error(err);
+      appLogger.error('footer_contact_submit_failed', 'Footer contact form submit failed', { error: err });
       setSubmitMessage('ไม่สามารถส่งข้อความได้ กรุณาลองใหม่อีกครั้ง');
     } finally {
       setIsSubmitting(false);

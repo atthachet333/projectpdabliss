@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '../config/api';
+import { appLogger } from './appLogger';
 const visitorKey = 'pda_analytics_visitor_id';
 const sessionKey = 'pda_analytics_session_id';
 const startedForms = new Set<string>();
@@ -163,7 +164,7 @@ export const flushAnalytics = async (): Promise<void> => {
   } catch {
     if (!warned) {
       warned = true;
-      console.warn('Analytics tracking failed');
+      appLogger.warn('analytics_tracking_failed', 'Analytics tracking failed');
     }
   }
 };

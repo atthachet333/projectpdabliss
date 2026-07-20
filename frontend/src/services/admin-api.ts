@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '../config/api';
+import { appLogger } from '../utils/appLogger';
 
 export type AdminUser = {
   id: number;
@@ -180,17 +181,36 @@ export class AdminApiError extends Error {
 }
 
 const request = async <T>(path: string, init: RequestInit = {}): Promise<ApiEnvelope<T>> => {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...init,
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...init.headers,
-    },
-  });
-  const body = await response.json().catch(() => ({ success: false, message: 'เกิดข้อผิดพลาด' })) as ApiEnvelope<T>;
-  if (!response.ok) throw new AdminApiError(body.message || 'เกิดข้อผิดพลาด', response.status);
-  return body;
+  try {
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+      ...init,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...init.headers,
+      },
+    });
+    const body = await response.json().catch(() => ({ success: false, message: 'เกิดข้อผิดพลาด' })) as ApiEnvelope<T>;
+    if (!response.ok) {
+      appLogger.warn('admin_api_request_failed', 'Admin API request failed', {
+        method: init.method || 'GET',
+        path,
+        status: response.status,
+        requestId: response.headers.get('x-request-id') || undefined,
+      });
+      throw new AdminApiError(body.message || 'เกิดข้อผิดพลาด', response.status);
+    }
+    return body;
+  } catch (error) {
+    if (!(error instanceof AdminApiError)) {
+      appLogger.error('admin_api_network_error', 'Admin API request could not reach the backend', {
+        method: init.method || 'GET',
+        path,
+        error,
+      });
+    }
+    throw error;
+  }
 };
 
 const queryString = (params: Record<string, string | number | undefined>): string => {

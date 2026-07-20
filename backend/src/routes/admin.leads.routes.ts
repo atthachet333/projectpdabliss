@@ -1,5 +1,6 @@
 import { Router, type Response } from 'express';
 import { db } from '../db';
+import { logger } from '../lib/logger';
 import type { AdminRequest } from '../security/admin-session';
 import type { ApiResponse } from '../types/contact';
 
@@ -132,6 +133,11 @@ router.patch('/leads/:id', (req: AdminRequest, res: Response<ApiResponse<unknown
   const id = numberParam(req.params.id, 0, 1, Number.MAX_SAFE_INTEGER);
   const current = db.prepare('SELECT id, status, note, assigned_to FROM contact_leads WHERE id = ?').get(id) as { id: number; status: string; note: string | null; assigned_to: string | null } | undefined;
   if (!current) {
+    logger.warn('admin_leads', 'lead_update_not_found', 'Admin tried to update a missing lead', {
+      requestId: req.requestId,
+      adminId: req.admin?.id,
+      leadId: id,
+    });
     res.status(404).json({ success: false, message: 'ไม่พบข้อมูล Lead' });
     return;
   }
@@ -140,6 +146,12 @@ router.patch('/leads/:id', (req: AdminRequest, res: Response<ApiResponse<unknown
   const note = body.note === null ? null : text(body.note, 1000);
   const assignedTo = body.assignedTo === null ? null : text(body.assignedTo, 120);
   if (status && !statuses.has(status)) {
+    logger.warn('admin_leads', 'lead_update_rejected', 'Admin lead update rejected', {
+      requestId: req.requestId,
+      adminId: req.admin?.id,
+      leadId: id,
+      reason: 'invalid_status',
+    });
     res.status(400).json({ success: false, message: 'สถานะไม่ถูกต้อง' });
     return;
   }
@@ -158,6 +170,14 @@ router.patch('/leads/:id', (req: AdminRequest, res: Response<ApiResponse<unknown
       email_provider_id, note, assigned_to, created_at, updated_at
     FROM contact_leads WHERE id = ?
   `).get(id) as Record<string, unknown>;
+  logger.info('admin_leads', 'lead_updated', 'Admin lead updated', {
+    requestId: req.requestId,
+    adminId: req.admin?.id,
+    leadId: id,
+    changedFields: Object.keys(body),
+    previousStatus: current.status,
+    nextStatus: row.status,
+  });
   res.header('Cache-Control', 'no-store').json({ success: true, message: 'บันทึกข้อมูลสำเร็จ', data: mapLead(row) });
 });
 

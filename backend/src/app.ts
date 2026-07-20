@@ -1,7 +1,9 @@
 import cors from 'cors';
 import express, { type NextFunction, type Request, type Response } from 'express';
 import helmet from 'helmet';
-import morgan from 'morgan'; // เพิ่ม Morgan เข้ามาสำหรับทำระบบ Log
+import { db } from './db';
+import { logger, sanitizeLogData } from './lib/logger';
+import { requestLogger } from './middleware/request-logger.middleware';
 import { requireAdmin } from './middleware/requireAdmin';
 import adminAuthRoutes from './routes/admin.auth.routes';
 import adminAnalyticsRoutes from './routes/admin.analytics.routes';
@@ -18,7 +20,10 @@ const allowedOrigins = configuredOrigins
   .map(origin => origin.trim())
   .filter(Boolean);
 
-console.log('Allowed CORS origins:', allowedOrigins);
+logger.info('config', 'cors_origins_loaded', 'Allowed CORS origins loaded', {
+  allowedOriginCount: allowedOrigins.length,
+  allowNoOrigin: true,
+});
 
 export const app = express();
 
@@ -38,21 +43,43 @@ app.use(
     credentials: true,
   })
 );
+app.use(requestLogger);
 app.use(express.json({ limit: '1mb' }));
 
-// เปิดใช้งาน Morgan เพื่อ log ทุก Request ที่เข้ามา (แสดงผลใน Console)
-app.use(morgan('dev'));
-
 // Endpoint สำหรับเช็คสถานะเซิร์ฟเวอร์
-app.get('/api/health', (_req: Request, res: Response<ApiResponse<{status: string}>>) => 
-  res.json({ success: true, message: 'ระบบพร้อมให้บริการ', data: { status: 'ปกติ' } })
-);
+app.get('/api/health', (_req: Request, res: Response<ApiResponse<Record<string, unknown>>>) => {
+  try {
+    db.prepare('SELECT 1').get();
+    res.json({
+      success: true,
+      message: 'ระบบพร้อมให้บริการ',
+      data: {
+        status: 'ok',
+        service: 'pdabliss-backend',
+        environment: process.env.NODE_ENV || 'development',
+        uptimeSeconds: Math.round(process.uptime()),
+        timestamp: new Date().toISOString(),
+        checks: {
+          database: 'ok',
+          emailConfiguration: ['RESEND_API_KEY', 'CONTACT_FROM_EMAIL', 'CONTACT_RECEIVER_EMAIL'].every(key => Boolean(process.env[key]?.trim())) ? 'ok' : 'missing',
+        },
+      },
+    });
+  } catch (error) {
+    logger.error('health', 'health_check_failed', 'Health check failed', { error });
+    res.status(503).json({ success: false, message: 'ระบบไม่พร้อมให้บริการ', data: { status: 'error' } });
+  }
+});
 
 // Endpoint ใหม่สำหรับรับ Log การกระทำต่างๆ จาก Frontend
 app.post('/api/logs', (req: Request, res: Response) => {
   const { action, details, timestamp } = req.body;
-  console.log(`[FRONTEND LOG] ${action} at ${timestamp}:`, details);
-  // ตรงนี้ในอนาคตคุณสามารถเขียนโค้ดเพื่อบันทึก Log ลง Database ได้ครับ
+  logger.info('frontend', 'client_log_received', 'Frontend log received', {
+    requestId: req.requestId,
+    action,
+    clientTimestamp: timestamp,
+    detailKeys: details && typeof details === 'object' ? Object.keys(sanitizeLogData(details)).slice(0, 20) : [],
+  });
   res.status(200).json({ success: true, message: 'บันทึก Log สำเร็จ' });
 });
 
@@ -66,6 +93,12 @@ const requireAllowedOrigin = (req: Request, res: Response<ApiResponse<never>>, n
     next();
     return;
   }
+  logger.warn('security', 'cors_origin_blocked', 'Blocked request from disallowed origin', {
+    requestId: req.requestId,
+    method: req.method,
+    path: req.originalUrl,
+    origin,
+  });
   res.status(403).json({ success: false, message: 'Origin not allowed' });
 };
 
@@ -84,12 +117,34 @@ app.use((_req: Request, res: Response<ApiResponse<never>>) =>
 );
 
 // จัดการ Error ภายในระบบ (500)
-app.use((error: Error, _req: Request, res: Response<ApiResponse<never>>, _next: NextFunction) => {
+app.use((error: Error, req: Request, res: Response<ApiResponse<unknown>>, _next: NextFunction) => {
+  if ((error as Error & { type?: string; status?: number }).type === 'entity.parse.failed') {
+    logger.warn('http', 'invalid_json_body', 'Request body JSON parsing failed', {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+      statusCode: 400,
+    });
+    res.status(400).json({ success: false, message: 'รูปแบบ JSON ไม่ถูกต้อง', data: { requestId: req.requestId } });
+    return;
+  }
+
   if (error.message === 'Origin not allowed by CORS') {
+    logger.warn('security', 'cors_origin_blocked', 'Blocked request from disallowed CORS origin', {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+      origin: req.get('origin'),
+    });
     res.status(403).json({ success: false, message: 'Origin not allowed by CORS' });
     return;
   }
 
-  console.error(error);
-  res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดภายในระบบ' });
+  logger.error('http', 'unhandled_error', 'Unhandled server error', {
+    requestId: req.requestId,
+    method: req.method,
+    path: req.originalUrl,
+    error,
+  });
+  res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดภายในระบบ', data: { requestId: req.requestId } });
 });

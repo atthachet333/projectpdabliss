@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { db } from '../db';
+import { logger } from '../lib/logger';
 import { normalizeEmail } from '../security/admin-session';
 
 const validRoles = new Set(['SUPERADMIN', 'ADMIN']);
@@ -24,8 +25,7 @@ const deleteAdminSessions = db.prepare('DELETE FROM admin_sessions WHERE admin_u
 export const ensureDefaultAdmin = async (): Promise<boolean> => {
   const forceReset = process.env.FORCE_RESET_DEFAULT_ADMIN === 'true';
   if (process.env.AUTO_CREATE_DEFAULT_ADMIN !== 'true') {
-    console.log('Default admin ensured: false');
-    console.log('Default admin password reset: false');
+    logger.info('admin_seed', 'default_admin_skipped', 'Default admin auto-create is disabled');
     return false;
   }
 
@@ -34,16 +34,18 @@ export const ensureDefaultAdmin = async (): Promise<boolean> => {
   const role = validRoles.has(process.env.DEFAULT_ADMIN_ROLE ?? '') ? process.env.DEFAULT_ADMIN_ROLE as 'SUPERADMIN' | 'ADMIN' : 'SUPERADMIN';
 
   if (!rawEmail || !password || password.length < 12) {
-    console.log('Default admin ensured: false');
-    console.log('Default admin password reset: false');
+    logger.error('admin_seed', 'default_admin_invalid_config', 'Default admin configuration is invalid', {
+      hasEmail: Boolean(rawEmail),
+      hasPassword: Boolean(password),
+      passwordLengthOk: password.length >= 12,
+    });
     throw new Error('Default admin configuration is invalid');
   }
 
   if (process.env.NODE_ENV === 'production') {
-    if (forceReset) console.warn('Default admin password reset skipped in production');
+    if (forceReset) logger.warn('admin_seed', 'default_admin_reset_skipped', 'Default admin password reset skipped in production');
     if (password === examplePassword) {
-      console.log('Default admin ensured: false');
-      console.log('Default admin password reset: false');
+      logger.error('admin_seed', 'default_admin_example_password_blocked', 'Default admin example password cannot be used in production');
       throw new Error('Default admin example password cannot be used in production');
     }
   }
@@ -57,17 +59,20 @@ export const ensureDefaultAdmin = async (): Promise<boolean> => {
     if (forceReset && process.env.NODE_ENV !== 'production') {
       resetAdmin.run(passwordHash, role, existing.id);
       deleteAdminSessions.run(existing.id);
-      console.log('Default admin ensured: true');
-      console.log('Default admin password reset: true');
+      logger.warn('admin_seed', 'default_admin_password_reset', 'Default admin password was reset in development', {
+        adminId: existing.id,
+        role,
+      });
       return true;
     }
-    console.log('Default admin ensured: true');
-    console.log('Default admin password reset: false');
+    logger.info('admin_seed', 'default_admin_exists', 'Default admin already exists', {
+      adminId: existing.id,
+      role,
+    });
     return false;
   }
 
   insertAdmin.run(email, passwordHash, role, forceReset && process.env.NODE_ENV !== 'production' ? 0 : 1);
-  console.log('Default admin ensured: true');
-  console.log('Default admin password reset: false');
+  logger.warn('admin_seed', 'default_admin_created', 'Default admin was created', { role });
   return true;
 };

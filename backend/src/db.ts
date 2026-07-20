@@ -1,15 +1,22 @@
 import Database from 'better-sqlite3';
 import { mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
+import { logger } from './lib/logger';
 
 const databasePath = resolve(process.cwd(), process.env.DATABASE_PATH ?? './data/pda-bliss.sqlite');
 mkdirSync(dirname(databasePath), { recursive: true });
 
+logger.info('database', 'connection_opening', 'Opening SQLite database connection', {
+  databasePathConfigured: Boolean(process.env.DATABASE_PATH?.trim()),
+});
 export const db = new Database(databasePath);
 db.pragma('foreign_keys = ON');
 db.pragma('journal_mode = WAL');
+logger.info('database', 'connection_opened', 'SQLite database connection opened');
 
 export const initDb = (): void => {
+  const startedAt = Date.now();
+  logger.info('database', 'migration_started', 'Database initialization started');
   db.exec(`
     CREATE TABLE IF NOT EXISTS admin_users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -218,6 +225,9 @@ export const initDb = (): void => {
   if (!adminUserColumns.has('must_change_password')) {
     db.exec('ALTER TABLE admin_users ADD COLUMN must_change_password INTEGER NOT NULL DEFAULT 0');
   }
+  logger.info('database', 'migration_completed', 'Database initialization completed', {
+    durationMs: Date.now() - startedAt,
+  });
 };
 
 initDb();

@@ -19,6 +19,7 @@ import { HomePage } from './pages/HomePage';
 import { ProcessPage } from './pages/ProcessPage';
 import { ServicesPage } from './pages/ServicesPage';
 import { SeoHead } from './seo/SeoHead';
+import { appLogger } from './utils/appLogger';
 import { logUserAction } from './utils/logger'; // นำเข้าฟังก์ชัน Log ของเรา
 import { initializeAnalytics } from './utils/analytics';
 
@@ -98,6 +99,7 @@ function AppRoutes(): JSX.Element {
 export default function App(): JSX.Element {
   useEffect(() => {
     initializeAnalytics();
+    appLogger.info('app_initialized', 'Frontend application initialized');
   }, []);
 
   return (

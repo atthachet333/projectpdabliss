@@ -1,5 +1,6 @@
 import type { NextFunction, Response } from 'express';
 import { db } from '../db';
+import { logger } from '../lib/logger';
 import { hashSessionToken, readCookie, type AdminRequest } from '../security/admin-session';
 import type { ApiResponse } from '../types/contact';
 
@@ -36,6 +37,11 @@ export const requireAdmin = (req: AdminRequest, res: Response<ApiResponse<never>
     deleteExpiredSessions.run();
     const token = readCookie(req);
     if (!token) {
+      logger.debug('admin_auth', 'session_missing', 'Admin request did not include a session cookie', {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+      });
       res.status(401).json({ success: false, message: 'กรุณาเข้าสู่ระบบ' });
       return;
     }
@@ -44,6 +50,12 @@ export const requireAdmin = (req: AdminRequest, res: Response<ApiResponse<never>
     const session = findSession.get(tokenHash) as SessionRow | undefined;
     if (!session || session.expires_at <= new Date().toISOString().slice(0, 19).replace('T', ' ') || !session.is_active) {
       deleteSession.run(tokenHash);
+      logger.warn('admin_auth', 'session_rejected', 'Admin session was rejected', {
+        requestId: req.requestId,
+        method: req.method,
+        path: req.originalUrl,
+        reason: !session ? 'not_found' : !session.is_active ? 'inactive_admin' : 'expired',
+      });
       res.status(401).json({ success: false, message: 'กรุณาเข้าสู่ระบบ' });
       return;
     }
@@ -58,7 +70,13 @@ export const requireAdmin = (req: AdminRequest, res: Response<ApiResponse<never>
       mustChangePassword: Boolean(session.must_change_password),
     };
     next();
-  } catch {
+  } catch (error) {
+    logger.error('admin_auth', 'session_check_failed', 'Admin session check failed', {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+      error,
+    });
     res.status(401).json({ success: false, message: 'กรุณาเข้าสู่ระบบ' });
   }
 };

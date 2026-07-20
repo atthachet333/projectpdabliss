@@ -2,6 +2,7 @@ import { createHmac } from 'node:crypto';
 import { Router, type Request, type Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import { db } from '../db';
+import { logger } from '../lib/logger';
 
 const router = Router();
 const allowedEventTypes = new Set([
@@ -26,6 +27,13 @@ const analyticsLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: { success: false, message: 'Too many analytics requests' },
+  handler: (req, res) => {
+    logger.warn('analytics', 'rate_limited', 'Analytics request rate limit reached', {
+      requestId: req.requestId,
+      path: req.originalUrl,
+    });
+    res.status(429).json({ success: false, message: 'Too many analytics requests' });
+  },
 });
 
 const text = (value: unknown, max: number): string | null => {
@@ -134,12 +142,18 @@ const insertBatch = db.transaction((payload: {
 });
 
 router.post('/events', analyticsLimiter, (req: Request, res: Response): void => {
+  const startedAt = Date.now();
   try {
     const body = req.body as Record<string, unknown>;
     const sessionId = requireUuid(body.sessionId);
     const visitorId = requireUuid(body.visitorId);
     const events = Array.isArray(body.events) ? body.events as Record<string, unknown>[] : [];
     if (!sessionId || !visitorId || events.length < 1 || events.length > 20) {
+      logger.warn('analytics', 'payload_rejected', 'Analytics payload rejected', {
+        requestId: req.requestId,
+        reason: 'invalid_shape',
+        eventCount: events.length,
+      });
       res.status(400).json({ success: false, message: 'Invalid analytics payload' });
       return;
     }
@@ -149,8 +163,19 @@ router.post('/events', analyticsLimiter, (req: Request, res: Response): void => 
       session: typeof body.session === 'object' && body.session ? body.session as Record<string, unknown> : {},
       events,
     });
+    logger.debug('analytics', 'events_saved', 'Analytics events saved', {
+      requestId: req.requestId,
+      received: events.length,
+      accepted,
+      durationMs: Date.now() - startedAt,
+    });
     res.json({ success: true, accepted });
-  } catch {
+  } catch (error) {
+    logger.warn('analytics', 'payload_rejected', 'Analytics payload rejected', {
+      requestId: req.requestId,
+      reason: 'validation_error',
+      error,
+    });
     res.status(400).json({ success: false, message: 'Invalid analytics payload' });
   }
 });

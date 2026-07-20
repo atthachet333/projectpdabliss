@@ -1,6 +1,7 @@
 import { Router, type Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import { db } from '../db';
+import { logger } from '../lib/logger';
 import type { AdminRequest } from '../security/admin-session';
 import { scanAllSeoPages, scanSeoPage, type SeoIssue } from '../seo/seo-scanner';
 import { clearSeoCache } from '../seo/public-seo';
@@ -13,6 +14,13 @@ const scanLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: { success: false, message: 'สแกนบ่อยเกินไป กรุณาลองใหม่ภายหลัง' },
+  handler: (req, res) => {
+    logger.warn('admin_seo', 'scan_rate_limited', 'SEO scan rate limit reached', {
+      requestId: req.requestId,
+      path: req.originalUrl,
+    });
+    res.status(429).json({ success: false, message: 'สแกนบ่อยเกินไป กรุณาลองใหม่ภายหลัง' });
+  },
 });
 
 const text = (value: unknown, max: number): string | undefined => {
@@ -199,6 +207,11 @@ router.patch('/seo/pages/:id', (req: AdminRequest, res: Response<ApiResponse<unk
     const id = numberParam(req.params.id, 0, 1, Number.MAX_SAFE_INTEGER);
     const current = db.prepare('SELECT * FROM seo_pages WHERE id = ?').get(id) as Record<string, unknown> | undefined;
     if (!current) {
+      logger.warn('admin_seo', 'page_update_not_found', 'Admin tried to update a missing SEO page', {
+        requestId: req.requestId,
+        adminId: req.admin?.id,
+        pageId: id,
+      });
       res.status(404).json({ success: false, message: 'ไม่พบหน้า SEO' });
       return;
     }
@@ -246,23 +259,56 @@ router.patch('/seo/pages/:id', (req: AdminRequest, res: Response<ApiResponse<unk
       VALUES (?, ?, ?, ?, ?)
     `).run(id, row.route_path, req.admin?.id ?? null, JSON.stringify(snapshot(current)), JSON.stringify(snapshot(row)));
     clearSeoCache(String(row.route_path));
+    logger.info('admin_seo', 'page_updated', 'Admin SEO page updated', {
+      requestId: req.requestId,
+      adminId: req.admin?.id,
+      pageId: id,
+      routePath: row.route_path,
+      changedFields: Object.keys(body),
+    });
     res.header('Cache-Control', 'no-store').json({ success: true, message: 'บันทึกข้อมูล SEO สำเร็จ', data: mapPage(row) });
-  } catch {
+  } catch (error) {
+    logger.warn('admin_seo', 'page_update_rejected', 'Admin SEO page update rejected', {
+      requestId: req.requestId,
+      adminId: req.admin?.id,
+      pageId: req.params.id,
+      error,
+    });
     res.status(400).json({ success: false, message: 'ข้อมูล SEO ไม่ถูกต้อง' });
   }
 });
 
 router.post('/seo/scan', scanLimiter, (req: AdminRequest, res: Response): void => {
+  const startedAt = Date.now();
   const results = scanAllSeoPages(req.admin?.id);
+  logger.info('admin_seo', 'site_scan_completed', 'Admin SEO site scan completed', {
+    requestId: req.requestId,
+    adminId: req.admin?.id,
+    pageCount: Array.isArray(results) ? results.length : undefined,
+    durationMs: Date.now() - startedAt,
+  });
   res.header('Cache-Control', 'no-store').json({ success: true, message: 'สแกน SEO ทั้งเว็บไซต์สำเร็จ', data: results });
 });
 
 router.post('/seo/scan/:routePath', scanLimiter, (req: AdminRequest, res: Response<ApiResponse<unknown>>): void => {
+  const startedAt = Date.now();
   try {
     const routePath = Array.isArray(req.params.routePath) ? req.params.routePath[0] : req.params.routePath;
     const result = scanSeoPage(decodeURIComponent(routePath), req.admin?.id);
+    logger.info('admin_seo', 'page_scan_completed', 'Admin SEO page scan completed', {
+      requestId: req.requestId,
+      adminId: req.admin?.id,
+      routePath: decodeURIComponent(routePath),
+      durationMs: Date.now() - startedAt,
+    });
     res.header('Cache-Control', 'no-store').json({ success: true, message: 'สแกน SEO สำเร็จ', data: result });
-  } catch {
+  } catch (error) {
+    logger.warn('admin_seo', 'page_scan_failed', 'Admin SEO page scan failed', {
+      requestId: req.requestId,
+      adminId: req.admin?.id,
+      routePath: req.params.routePath,
+      error,
+    });
     res.status(404).json({ success: false, message: 'ไม่พบ route ที่ต้องการสแกน' });
   }
 });
