@@ -21,7 +21,7 @@ const start = async (): Promise<void> => {
   const server = app.listen(port, () => logger.info('startup', 'application_ready', 'Backend application is ready', { port }));
 
   const shutdown = (signal: string): void => {
-    logger.info('shutdown', 'application_stopping', 'Backend application is stopping', { signal });
+    logger.info('shutdown', 'application_shutdown_started', 'Backend application is stopping', { signal });
     server.close(() => {
       db.close();
       logger.info('shutdown', 'application_stopped', 'Backend application stopped', { signal });

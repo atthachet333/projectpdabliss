@@ -149,7 +149,7 @@ router.post('/events', analyticsLimiter, (req: Request, res: Response): void => 
     const visitorId = requireUuid(body.visitorId);
     const events = Array.isArray(body.events) ? body.events as Record<string, unknown>[] : [];
     if (!sessionId || !visitorId || events.length < 1 || events.length > 20) {
-      logger.warn('analytics', 'payload_rejected', 'Analytics payload rejected', {
+      logger.warn('analytics', 'analytics_operation_failed', 'Analytics payload rejected', {
         requestId: req.requestId,
         reason: 'invalid_shape',
         eventCount: events.length,
@@ -163,7 +163,7 @@ router.post('/events', analyticsLimiter, (req: Request, res: Response): void => 
       session: typeof body.session === 'object' && body.session ? body.session as Record<string, unknown> : {},
       events,
     });
-    logger.debug('analytics', 'events_saved', 'Analytics events saved', {
+    logger.debug('analytics', 'analytics_events_saved', 'Analytics events saved', {
       requestId: req.requestId,
       received: events.length,
       accepted,
@@ -171,7 +171,7 @@ router.post('/events', analyticsLimiter, (req: Request, res: Response): void => 
     });
     res.json({ success: true, accepted });
   } catch (error) {
-    logger.warn('analytics', 'payload_rejected', 'Analytics payload rejected', {
+    logger.warn('analytics', 'analytics_operation_failed', 'Analytics payload rejected', {
       requestId: req.requestId,
       reason: 'validation_error',
       error,

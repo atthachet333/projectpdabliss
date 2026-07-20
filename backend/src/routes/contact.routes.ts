@@ -142,7 +142,7 @@ const leadValues = (data: CleanContact): [string, string, string | null, string 
 
 router.post('/', async (req: Request<Record<string, never>, ApiResponse<never>, ContactRequestBody>, res: Response<ApiResponse<never>>): Promise<void> => {
   const startedAt = Date.now();
-  logger.info('contact', 'submit_started', 'Contact form submission started', {
+  logger.info('contact', 'contact_submission_received', 'Contact form submission started', {
     requestId: req.requestId,
     sourcePage: typeof req.body?.pageUrl === 'string' ? req.body.pageUrl.slice(0, 300) : undefined,
   });
@@ -163,7 +163,7 @@ router.post('/', async (req: Request<Record<string, never>, ApiResponse<never>, 
   }
 
   const values = leadValues(result.data);
-  logger.info('contact', 'lead_validated', 'Contact lead passed validation', {
+  logger.info('contact', 'contact_submission_validated', 'Contact lead passed validation', {
     requestId: req.requestId,
     email: maskEmail(result.data.email),
     phone: maskPhone(result.data.phone),
@@ -186,7 +186,7 @@ router.post('/', async (req: Request<Record<string, never>, ApiResponse<never>, 
   }
 
   const leadId = Number(insertLead.run(...values).lastInsertRowid);
-  logger.info('contact', 'lead_saved', 'Contact lead saved', {
+  logger.info('contact', 'contact_lead_saved', 'Contact lead saved', {
     requestId: req.requestId,
     leadId,
     emailDeliveryStatus: 'PENDING',
@@ -195,7 +195,7 @@ router.post('/', async (req: Request<Record<string, never>, ApiResponse<never>, 
   if (missing.length) {
     logEmailStatus(missing);
     updateLeadDelivery.run('FAILED', null, leadId);
-    logger.warn('contact', 'submit_failed', 'Contact form submission failed because email provider is not configured', {
+    logger.warn('contact', 'contact_submission_failed', 'Contact form submission failed because email provider is not configured', {
       requestId: req.requestId,
       leadId,
       durationMs: Date.now() - startedAt,
@@ -207,7 +207,7 @@ router.post('/', async (req: Request<Record<string, never>, ApiResponse<never>, 
   const { RESEND_API_KEY, CONTACT_FROM_EMAIL, CONTACT_RECEIVER_EMAIL } = process.env as Record<(typeof emailKeys)[number], string>;
 
   try {
-    logger.info('email', 'send_started', 'Contact notification email send started', {
+    logger.info('email', 'contact_email_send_started', 'Contact notification email send started', {
       requestId: req.requestId,
       leadId,
       provider: 'resend',
@@ -223,7 +223,7 @@ router.post('/', async (req: Request<Record<string, never>, ApiResponse<never>, 
 
     if (error) throw error;
     updateLeadDelivery.run('SENT', data?.id ?? null, leadId);
-    logger.info('email', 'send_succeeded', 'Contact notification email sent', {
+    logger.info('email', 'contact_email_sent', 'Contact notification email sent', {
       requestId: req.requestId,
       leadId,
       provider: 'resend',
@@ -234,7 +234,7 @@ router.post('/', async (req: Request<Record<string, never>, ApiResponse<never>, 
     res.json({ success: true, message: 'ส่งข้อความเรียบร้อยแล้ว' });
   } catch (error) {
     updateLeadDelivery.run('FAILED', null, leadId);
-    logger.error('email', 'send_failed', 'Contact notification email failed', {
+    logger.error('email', 'contact_email_failed', 'Contact notification email failed', {
       requestId: req.requestId,
       leadId,
       provider: 'resend',

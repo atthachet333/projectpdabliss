@@ -35,9 +35,11 @@ const loginLimiter = rateLimit({
   legacyHeaders: false,
   message: { success: false, message: 'พยายามเข้าสู่ระบบบ่อยเกินไป กรุณาลองใหม่ภายหลัง' },
   handler: (req, res) => {
-    logger.warn('admin_auth', 'login_rate_limited', 'Admin login rate limit reached', {
+    logger.warn('admin_auth', 'admin_login_failed', 'Admin login rate limit reached', {
       requestId: req.requestId,
       path: req.originalUrl,
+      reason: 'rate_limited',
+      statusCode: 429,
     });
     res.status(429).json({ success: false, message: 'พยายามเข้าสู่ระบบบ่อยเกินไป กรุณาลองใหม่ภายหลัง' });
   },
@@ -58,15 +60,16 @@ router.post('/login', loginLimiter, async (req: Request, res: Response<ApiRespon
   const body = (req.body ?? {}) as { email?: unknown; password?: unknown };
   const email = normalizeEmail(text(body.email));
   const password = typeof body.password === 'string' ? body.password : '';
-  logger.info('admin_auth', 'login_attempt', 'Admin login attempt started', {
+  logger.info('admin_auth', 'admin_login_attempt', 'Admin login attempt started', {
     requestId: req.requestId,
     email: maskEmail(email),
   });
   if (!email || !password) {
-    logger.warn('admin_auth', 'login_failed', 'Admin login failed', {
+    logger.warn('admin_auth', 'admin_login_failed', 'Admin login failed', {
       requestId: req.requestId,
       email: maskEmail(email),
       reason: 'missing_credentials',
+      statusCode: 401,
     });
     res.status(401).json({ success: false, message: loginMessage });
     return;
@@ -74,10 +77,11 @@ router.post('/login', loginLimiter, async (req: Request, res: Response<ApiRespon
 
   const admin = findAdminByEmail.get(email) as AdminUserRow | undefined;
   if (!admin || !admin.is_active || !(await bcrypt.compare(password, admin.password_hash))) {
-    logger.warn('admin_auth', 'login_failed', 'Admin login failed', {
+    logger.warn('admin_auth', 'admin_login_failed', 'Admin login failed', {
       requestId: req.requestId,
       email: maskEmail(email),
       reason: !admin ? 'invalid_credentials' : !admin.is_active ? 'inactive_admin' : 'invalid_credentials',
+      statusCode: 401,
     });
     res.status(401).json({ success: false, message: loginMessage });
     return;
@@ -88,7 +92,7 @@ router.post('/login', loginLimiter, async (req: Request, res: Response<ApiRespon
   insertSession.run(admin.id, hashSessionToken(token), `+${maxAgeHours} hours`, req.get('user-agent')?.slice(0, 300) ?? null, hashIp(req.ip));
   updateLastLogin.run(admin.id);
   setSessionCookie(res, token);
-  logger.info('admin_auth', 'login_succeeded', 'Admin login succeeded', {
+  logger.info('admin_auth', 'admin_login_succeeded', 'Admin login succeeded', {
     requestId: req.requestId,
     adminId: admin.id,
     role: admin.role,
@@ -103,7 +107,7 @@ router.post('/login', loginLimiter, async (req: Request, res: Response<ApiRespon
 });
 
 router.get('/me', requireAdmin, (req: AdminRequest, res: Response<ApiResponse<{ admin: NonNullable<AdminRequest['admin']> }>>): void => {
-  logger.debug('admin_auth', 'session_checked', 'Admin session checked', {
+  logger.debug('admin_auth', 'admin_session_checked', 'Admin session checked', {
     requestId: req.requestId,
     adminId: req.admin?.id,
     role: req.admin?.role,
@@ -114,7 +118,7 @@ router.get('/me', requireAdmin, (req: AdminRequest, res: Response<ApiResponse<{ 
 router.post('/logout', requireAdmin, (req: AdminRequest, res: Response<ApiResponse<never>>): void => {
   if (req.adminSessionTokenHash) deleteSession.run(req.adminSessionTokenHash);
   clearSessionCookie(res);
-  logger.info('admin_auth', 'logout_succeeded', 'Admin logout succeeded', {
+  logger.info('admin_auth', 'admin_logout_succeeded', 'Admin logout succeeded', {
     requestId: req.requestId,
     adminId: req.admin?.id,
     role: req.admin?.role,

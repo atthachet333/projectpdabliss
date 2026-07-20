@@ -37,10 +37,11 @@ export const requireAdmin = (req: AdminRequest, res: Response<ApiResponse<never>
     deleteExpiredSessions.run();
     const token = readCookie(req);
     if (!token) {
-      logger.debug('admin_auth', 'session_missing', 'Admin request did not include a session cookie', {
+      logger.info('admin_auth', 'admin_unauthorized_request', 'Admin request did not include a session cookie', {
         requestId: req.requestId,
         method: req.method,
         path: req.originalUrl,
+        statusCode: 401,
       });
       res.status(401).json({ success: false, message: 'กรุณาเข้าสู่ระบบ' });
       return;
@@ -50,11 +51,13 @@ export const requireAdmin = (req: AdminRequest, res: Response<ApiResponse<never>
     const session = findSession.get(tokenHash) as SessionRow | undefined;
     if (!session || session.expires_at <= new Date().toISOString().slice(0, 19).replace('T', ' ') || !session.is_active) {
       deleteSession.run(tokenHash);
-      logger.warn('admin_auth', 'session_rejected', 'Admin session was rejected', {
+      const reason = !session ? 'invalid' : !session.is_active ? 'forbidden' : 'expired';
+      logger.warn('admin_auth', reason === 'expired' ? 'admin_session_expired' : reason === 'forbidden' ? 'admin_forbidden_request' : 'admin_session_invalid', 'Admin session was rejected', {
         requestId: req.requestId,
         method: req.method,
         path: req.originalUrl,
-        reason: !session ? 'not_found' : !session.is_active ? 'inactive_admin' : 'expired',
+        reason,
+        statusCode: 401,
       });
       res.status(401).json({ success: false, message: 'กรุณาเข้าสู่ระบบ' });
       return;

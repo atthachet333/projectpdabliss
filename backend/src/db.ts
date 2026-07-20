@@ -6,13 +6,13 @@ import { logger } from './lib/logger';
 const databasePath = resolve(process.cwd(), process.env.DATABASE_PATH ?? './data/pda-bliss.sqlite');
 mkdirSync(dirname(databasePath), { recursive: true });
 
-logger.info('database', 'connection_opening', 'Opening SQLite database connection', {
+logger.info('database', 'database_connection_opening', 'Opening SQLite database connection', {
   databasePathConfigured: Boolean(process.env.DATABASE_PATH?.trim()),
 });
 export const db = new Database(databasePath);
 db.pragma('foreign_keys = ON');
 db.pragma('journal_mode = WAL');
-logger.info('database', 'connection_opened', 'SQLite database connection opened');
+logger.info('database', 'database_connection_opened', 'SQLite database connection opened');
 
 export const initDb = (): void => {
   const startedAt = Date.now();
